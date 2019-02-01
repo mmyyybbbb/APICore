@@ -17,6 +17,12 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
         sessionManager = SessionManager.instance
         bodyEncoding = { _ in JSONEncoding.default}
     }
+    
+    init(baseUrl: URL, sessionManager: SessionManager, bodyEncoding: @escaping MethodBodyEncoding) {
+        self.baseUrl = baseUrl
+        self.sessionManager = sessionManager
+        self.bodyEncoding = bodyEncoding
+    }
 }
 
 
