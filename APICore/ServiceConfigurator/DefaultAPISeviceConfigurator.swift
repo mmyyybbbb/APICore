@@ -11,6 +11,7 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
     public var sessionManager: SessionManager
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
+    public var plugins: [Plugins] = []
     
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl
