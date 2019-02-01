@@ -11,7 +11,7 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
     public var sessionManager: SessionManager
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
-    public var plugins: [Plugins] = []
+    public var plugins: [Plugin] = []
     
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl
@@ -22,7 +22,7 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
     public init(baseUrl: URL,
                 sessionManager: SessionManager = SessionManager.instance,
                 bodyEncoding: @escaping MethodBodyEncoding = { _ in JSONEncoding.default},
-                plugins: [Plugins] = []) {
+                plugins: [Plugin] = []) {
         
         self.baseUrl = baseUrl
         self.sessionManager = sessionManager
