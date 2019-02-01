@@ -11,7 +11,7 @@ import Alamofire
 public final class APICoreObjectContainer {
     private static var instance: APICoreObjectContainer?
     
-    static var instanceLazyInit: APICoreObjectContainer {
+    public static var instanceLazyInit: APICoreObjectContainer {
         if let instance = instance {
             return instance
         }
@@ -22,6 +22,7 @@ public final class APICoreObjectContainer {
     }
     
     private var configurators: [APIServiceConfiguratorType] = []
+    private var serviceConfigurators: [String : APIServiceConfiguratorType] = [:]
     private var services: [String: Any] = [:]
  
     private init() { }
@@ -34,26 +35,41 @@ public final class APICoreObjectContainer {
        configurators.append(configurator)
     }
     
-    func resolveOrRegisterService<T:APIServiceType>() -> T {
-        let key = "\(T.self)"
+    public func register<S:APIServiceType>(configurator: APIServiceConfiguratorType, for service: S.Type) {
+        let key = "\(S.Method.self)"
+        serviceConfigurators[key] = configurator
+    }
+    
+    func resolveOrRegisterService<S:APIServiceType>() -> S {
+        let key = "\(S.self)"
         
         if let service = services[key] {
-            guard let service = service as? T else {
+            guard let service = service as? S else {
                 fatal("Сервис имеет некорректный тип")
             }
             
             return service
         }
         
-        let service = T.init()
+        let service = S.init()
         services[key] = service
         return service
     }
     
-    func resolveServiceConfigurator<T:APIServiceConfiguratorType>() -> T? {
-        guard let configurator = configurators.first(where: {$0 is T}) as? T else {
-            error("\(T.self) такой конфигуратор не зарегестрирован в APICoreObjectContainer")
+    func resolveServiceConfigurator<C:APIServiceConfiguratorType>() -> C? {
+        guard let configurator = configurators.first(where: {$0 is C}) as? C else {
+            error("\(C.self) такой конфигуратор не зарегестрирован в APICoreObjectContainer")
             return nil
+        }
+        
+        return configurator
+    }
+    
+    func resolveServiceConfigurator<C:APIServiceConfiguratorType, S:APIServiceType>(for service: S.Type) -> C? {
+        let key = "\(S.Method.self)"
+        
+        guard let configurator = serviceConfigurators[key] as? C else {
+            return resolveServiceConfigurator()
         }
         
         return configurator

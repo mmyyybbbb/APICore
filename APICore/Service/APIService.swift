@@ -33,7 +33,6 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
  
     }()
     
-    
     required public init() {}
 }
 

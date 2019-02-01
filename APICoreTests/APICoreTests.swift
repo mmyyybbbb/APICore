@@ -10,13 +10,39 @@
 import XCTest
 import RxSwift
 import RxBlocking
+import Moya
 
 class APICoreTests: XCTestCase {
     
     override func setUp() {
         APICoreObjectContainer.instanceLazyInit.register(ReqresServicesConfigurator())
     }
+    
+    override func tearDown() {
+        APICoreObjectContainer.releaseInstance()
+    }
  
+    func test_customConfigurationForService() {
+        // запрос должен отвалиться потомучту мы переопределим конфигурацию для сервиса и укажем в ней некорректный url
+        let configurator = ReqresServicesConfigurator(baseUrl: "https://reqres2222222.in") // плохой url
+        APICoreObjectContainer.instanceLazyInit.register(configurator: configurator, for: ReqresUserAPI.self)
+        
+        let request = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request()
+        let result = request.toBlocking().materialize()
+        
+        switch result {
+        case .completed: XCTFail("No expected result")
+        case let .failed(_, error):
+            
+            guard case MoyaError.underlying(let err, _) = error else  {
+                XCTFail("No expected result")
+                return
+            }
+
+            XCTAssertEqual((err as NSError).domain, "NSURLErrorDomain", "")
+        }
+    }
+    
     func test_simpleRequest() {
         
         do {
@@ -50,5 +76,6 @@ class APICoreTests: XCTestCase {
             XCTFail("Catched error: \(error)")
         }
     }
+
 }
 
