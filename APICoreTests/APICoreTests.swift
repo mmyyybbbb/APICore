@@ -8,8 +8,6 @@
 
 @testable import APICore
 import XCTest
-import Moya
-import Alamofire
 import RxSwift
 import RxBlocking
 
