@@ -70,6 +70,7 @@
 		03E3A9B5220330680005A0A1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		03E3A9B72203318B0005A0A1 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		03E3A9BB220333680005A0A1 /* Pluggins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pluggins.swift; sourceTree = "<group>"; };
+		03E3AA67220879A90005A0A1 /* APICore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = APICore.podspec; sourceTree = "<group>"; };
 		103ADD96DE0CF548166B15FA /* Pods_APICore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		58366D556134DCFAB6F1795F /* Pods-APICore-APICore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICore-APICore.debug.xcconfig"; path = "Target Support Files/Pods-APICore-APICore/Pods-APICore-APICore.debug.xcconfig"; sourceTree = "<group>"; };
 		696D69E15D681A11F8FE5F50 /* Pods-APICore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICore.debug.xcconfig"; path = "Target Support Files/Pods-APICore/Pods-APICore.debug.xcconfig"; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 		03A74AF821E8C27B00D32CBF = {
 			isa = PBXGroup;
 			children = (
+				03E3AA67220879A90005A0A1 /* APICore.podspec */,
 				03A74B0421E8C27B00D32CBF /* APICore */,
 				03739ECC22009B1100EC583E /* APICoreTests */,
 				03A74B0321E8C27B00D32CBF /* Products */,
