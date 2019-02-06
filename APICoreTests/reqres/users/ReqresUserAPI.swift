@@ -12,4 +12,6 @@ final class ReqresUserAPI: APIService<ReqresUserMethods, ReqresServicesConfigura
     
     override var urlServicePathComponent: String { return "/api/" }
     
+    override var authStrategy: AuthStrategy { return .addTokenToUrl(urlParamName: "AUTH_TOKEN")}
+    
 }

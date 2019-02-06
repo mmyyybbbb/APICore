@@ -12,11 +12,15 @@ import RxSwift
 import RxBlocking
 import Moya
 
-class APICoreTests: XCTestCase {
+class APICoreTests: XCTestCase, AuthTokenProvider {
     
     override func setUp() {
-        APICoreObjectContainer.instanceLazyInit.register(ReqresServicesConfigurator())
+        let config = ReqresServicesConfigurator()
+        config.authTokenProvider = self
+        APICoreObjectContainer.instanceLazyInit.register(config)
     }
+    
+     var token: AuthToken? = "token"
     
     override func tearDown() {
         APICoreObjectContainer.releaseInstance()

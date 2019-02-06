@@ -73,7 +73,7 @@ fileprivate extension APIService {
     
     func buildTask(_ method: Method) -> Task {
         var methodParams = method.params
-        
+        print("url: \(authStrategy)")
         if case let AuthStrategy.addTokenToUrl(urlParamName: authUrlTokenKey) = authStrategy,
            let token = configuratorStrong.authTokenProvider?.token {
             if var methodParams = methodParams {
@@ -129,6 +129,7 @@ fileprivate extension APIService {
                                               uniquingKeysWith: {( _, meth) in meth })
         }
         
+        print("header: \(authStrategy)")
         if case let AuthStrategy.addTokenToHeader(headerName: headerTokenKey) = authStrategy,
             let token = configuratorStrong.authTokenProvider?.token {
             fullHeaders[headerTokenKey] = token 

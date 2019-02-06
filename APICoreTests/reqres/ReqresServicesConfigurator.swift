@@ -13,6 +13,7 @@ final class ReqresServicesConfigurator: APIServiceConfiguratorType {
     var bodyEncoding: MethodBodyEncoding = { _ in JSONEncoding.default}
     var baseUrl: URL = URL(string: "https://reqres.in")!
     var plugins: [Plugin] = [Plugins.logger()]
+    var authTokenProvider: AuthTokenProvider?
     
     init() { }
     
