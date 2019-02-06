@@ -14,10 +14,12 @@ public protocol APIServiceConfiguratorType: class {
     var sessionManager: SessionManager { get }
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
+    var authTokenProvider: AuthTokenProvider? { get }
 }
 
 extension APIServiceConfiguratorType {
-    public var baseHeaders: [String: String]? { return nil } 
+    public var authTokenProvider: AuthTokenProvider? { return nil } 
+    public var baseHeaders: [String: String]? { return nil }
     public var plugins: [Plugin] { return [] } 
 }
 

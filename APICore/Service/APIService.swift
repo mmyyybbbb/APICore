@@ -16,6 +16,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
     open var useMocksIfSetted: Bool = true
     open var urlServicePathComponent: String { return "" }
     open var serviceHeaders:[String: String]? { return nil }
+    open var authStrategy: AuthStrategy { return .withoutAuth }
     
     private var configuratorStrong: Configurator {
         guard let serviceConfigurator = APIService<TMethod, TConfigurator>.configurator else {
@@ -71,18 +72,28 @@ fileprivate extension APIService {
     }
     
     func buildTask(_ method: Method) -> Task {
+        var methodParams = method.params
+        
+        if case let AuthStrategy.addTokenToUrl(urlParamName: authUrlTokenKey) = authStrategy,
+           let token = configuratorStrong.authTokenProvider?.token {
+            if var methodParams = methodParams {
+                methodParams.url(authUrlTokenKey, token)
+            } else {
+                methodParams = MethodParams(inUrl: [authUrlTokenKey: token])
+            }
+        }
         
         if let multipartData = method.multipart {
             let formData = MultipartFormData(provider: .data(multipartData.data),
                                              name: "file",
                                              fileName: "file.jpg",
                                              mimeType: multipartData.mimeType)
-            let urlParams = method.params?.urlParams ?? [:]
+            let urlParams = methodParams?.urlParams ?? [:]
             return .uploadCompositeMultipart([formData], urlParameters: urlParams)
         }
         
         
-        if let params = method.params {
+        if let params = methodParams {
             
             return .requestCompositeParameters(bodyParameters: params.bodyParams,
                                                bodyEncoding: getBodyEncoding(method),
@@ -117,6 +128,12 @@ fileprivate extension APIService {
             fullHeaders = fullHeaders.merging(methodHeaders,
                                               uniquingKeysWith: {( _, meth) in meth })
         }
+        
+        if case let AuthStrategy.addTokenToHeader(headerName: headerTokenKey) = authStrategy,
+            let token = configuratorStrong.authTokenProvider?.token {
+            fullHeaders[headerTokenKey] = token 
+        }
+        
         return fullHeaders
     }
     

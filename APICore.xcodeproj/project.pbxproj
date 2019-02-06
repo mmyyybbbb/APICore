@@ -29,6 +29,8 @@
 		03E3A9B6220330680005A0A1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9B5220330680005A0A1 /* User.swift */; };
 		03E3A9B82203318B0005A0A1 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9B72203318B0005A0A1 /* Response.swift */; };
 		03E3A9BC220333680005A0A1 /* Pluggins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9BB220333680005A0A1 /* Pluggins.swift */; };
+		03E630F4220AEA470082685F /* AuthStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E630F3220AEA470082685F /* AuthStrategy.swift */; };
+		03E630F7220AEAE00082685F /* AuthTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E630F6220AEAE00082685F /* AuthTokenProvider.swift */; };
 		5D1442CEC60E8FED2AFA8469 /* Pods_APICore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 103ADD96DE0CF548166B15FA /* Pods_APICore.framework */; };
 		F06659A4D60C4C24CF651030 /* Pods_APICoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D523B786806740180716C9 /* Pods_APICoreTests.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +73,8 @@
 		03E3A9B72203318B0005A0A1 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		03E3A9BB220333680005A0A1 /* Pluggins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pluggins.swift; sourceTree = "<group>"; };
 		03E3AA67220879A90005A0A1 /* APICore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = APICore.podspec; sourceTree = "<group>"; };
+		03E630F3220AEA470082685F /* AuthStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStrategy.swift; sourceTree = "<group>"; };
+		03E630F6220AEAE00082685F /* AuthTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenProvider.swift; sourceTree = "<group>"; };
 		07584CA929F6A94467FB6216 /* Pods_APICore_APICoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore_APICoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		103ADD96DE0CF548166B15FA /* Pods_APICore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		883F8C7D167220DE3EE50BE6 /* Pods-APICore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICore.release.xcconfig"; path = "Target Support Files/Pods-APICore/Pods-APICore.release.xcconfig"; sourceTree = "<group>"; };
@@ -169,6 +173,7 @@
 		03A74B0421E8C27B00D32CBF /* APICore */ = {
 			isa = PBXGroup;
 			children = (
+				03E630F5220AEAD20082685F /* Auth */,
 				03739EBF22008DB000EC583E /* Service */,
 				03739EC322008E1E00EC583E /* ServiceMethod */,
 				03739EC022008DC300EC583E /* ServiceConfigurator */,
@@ -212,6 +217,15 @@
 				03E3A9B72203318B0005A0A1 /* Response.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		03E630F5220AEAD20082685F /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				03E630F3220AEA470082685F /* AuthStrategy.swift */,
+				03E630F6220AEAE00082685F /* AuthTokenProvider.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		4A7F795233BD9F509F288DA0 /* Pods */ = {
@@ -439,6 +453,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03E630F4220AEA470082685F /* AuthStrategy.swift in Sources */,
 				03E3A9BC220333680005A0A1 /* Pluggins.swift in Sources */,
 				03739EBA21FF272200EC583E /* APICoreObjectContainer.swift in Sources */,
 				03739EBC21FF28AB00EC583E /* RequestBuilder.swift in Sources */,
@@ -448,6 +463,7 @@
 				03739EC222008E0900EC583E /* DefaultAPISeviceConfigurator.swift in Sources */,
 				03E3A9AE220318C90005A0A1 /* BinaryData.swift in Sources */,
 				03739EBE21FF41DF00EC583E /* APIServiceConfiguratorType.swift in Sources */,
+				03E630F7220AEAE00082685F /* AuthTokenProvider.swift in Sources */,
 				034354CA220204580039090C /* MockKeyType.swift in Sources */,
 				03739EB821FEF17C00EC583E /* APIServiceMethod.swift in Sources */,
 				03E3A9AA220314B10005A0A1 /* MethodParams.swift in Sources */,

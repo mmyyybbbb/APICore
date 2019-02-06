@@ -27,6 +27,7 @@ open class RequestBuilder<S: APIServiceType>  {
             return try JSONDecoder().decode(T.self, from: response.data)
         }
     }
+    
 }
 
 

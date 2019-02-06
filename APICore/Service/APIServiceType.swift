@@ -16,6 +16,7 @@ public protocol APIServiceType: class {
     var provider: MoyaProvider<Method> { get }
     var urlServicePathComponent: String { get }
     var serviceHeaders: [String: String]? { get }
+    var authStrategy: AuthStrategy { get }
     
     init()
 }

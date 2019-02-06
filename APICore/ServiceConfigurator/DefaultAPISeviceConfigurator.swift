@@ -12,6 +12,7 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
     public var plugins: [Plugin] = []
+    public var authTokenProvider: AuthTokenProvider? = nil
     
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl

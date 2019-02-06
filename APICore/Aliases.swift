@@ -16,7 +16,7 @@ public typealias APIHTTPMethod = HTTPMethod
 public typealias MethodPath = (APIHTTPMethod, String)
 public typealias JSONEncoding = Alamofire.JSONEncoding
 public typealias Plugin = PluginType
-
+public typealias AuthToken = String 
 
 public extension SessionManager {
     public static var instance: SessionManager {
