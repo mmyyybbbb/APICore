@@ -54,6 +54,14 @@ public extension  APIService {
     }
 }
 
+//MARK: Public+
+public extension APIService where TMethod.MockKey: MockSampleData {
+    public func setMockFromSample(for key: Method.MockKey) {
+        guard let sample = key.sampleData else { return }
+        setMock(for: key, value: sample)
+    }
+}
+
 //MARK: Private
 fileprivate extension APIService {
     
@@ -74,13 +82,10 @@ fileprivate extension APIService {
     func buildTask(_ method: Method) -> Task {
         var methodParams = method.params
         print("url: \(authStrategy)")
+        
         if case let AuthStrategy.addTokenToUrl(urlParamName: authUrlTokenKey) = authStrategy,
            let token = configuratorStrong.authTokenProvider?.token {
-            if var methodParams = methodParams {
-                methodParams.url(authUrlTokenKey, token)
-            } else {
-                methodParams = MethodParams(inUrl: [authUrlTokenKey: token])
-            }
+            methodParams.url(authUrlTokenKey, token)
         }
         
         if let multipartData = method.multipart {
@@ -88,19 +93,12 @@ fileprivate extension APIService {
                                              name: "file",
                                              fileName: "file.jpg",
                                              mimeType: multipartData.mimeType)
-            let urlParams = methodParams?.urlParams ?? [:]
-            return .uploadCompositeMultipart([formData], urlParameters: urlParams)
+            return .uploadCompositeMultipart([formData], urlParameters: methodParams.urlParams)
         }
         
-        
-        if let params = methodParams {
-            
-            return .requestCompositeParameters(bodyParameters: params.bodyParams,
-                                               bodyEncoding: getBodyEncoding(method),
-                                               urlParameters: params.urlParams)
-        }
-        
-        return .requestPlain
+        return .requestCompositeParameters(bodyParameters: methodParams.bodyParams,
+                                           bodyEncoding: getBodyEncoding(method),
+                                           urlParameters: methodParams.urlParams)
     }
     
     func getBodyEncoding(_ method: Method) -> ParameterEncoding {

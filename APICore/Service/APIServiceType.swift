@@ -21,7 +21,7 @@ public protocol APIServiceType: class {
     init()
 }
 
-extension APIServiceType {
+public extension APIServiceType {
     // прежде чем вызывать данный сервис убедитесь что APICoreObjectContainer существует
     static var shared: Self {  return APICoreObjectContainer.instanceLazyInit.resolveOrRegisterService()  }
     static var configurator: Configurator? { return APICoreObjectContainer.instanceLazyInit.resolveServiceConfigurator(for: Self.self) }
