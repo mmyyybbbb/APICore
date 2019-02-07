@@ -13,14 +13,14 @@ public enum BinaryData {
     public var mimeType: String {
         switch self {
         case .jpeg: return "image/jpeg"
-        case .custom(_ ,let str): return str
+        case .custom(_, let str): return str
         }
     }
     
     public var data: Data {
         switch self {
         case .jpeg(let data): return data
-        case .custom(let data , _): return data
+        case .custom(let data, _): return data
         }
     }
 }

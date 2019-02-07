@@ -7,7 +7,6 @@
 //
 import Moya
 
-
 public protocol APIServiceType: class {
     associatedtype Method: APIServiceMethod
     associatedtype Configurator: APIServiceConfiguratorType

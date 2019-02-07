@@ -9,8 +9,7 @@ import Moya
 import Alamofire
 import UIKit
 
-
-public protocol APIServiceMethod : TargetType {
+public protocol APIServiceMethod: TargetType {
     associatedtype MockKey: MockKeyType
     
     var methodPath: MethodPath { get }
@@ -21,9 +20,9 @@ public protocol APIServiceMethod : TargetType {
 }
 
 public extension APIServiceMethod {
-    var path: String { return methodPath.1 }
+    var path: String { return methodPath.path }
     var params: MethodParams { return  MethodParams() }
-    var method: HTTPMethod { return methodPath.0 }
+    var method: HTTPMethod { return methodPath.httpMethod }
     var sampleData: Data { return Data() }
     var headers: [String : String]? { return nil }
     var baseURL: URL { return URL(string: "")! }
