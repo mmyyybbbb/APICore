@@ -20,6 +20,7 @@
 		03739ED022009B1100EC583E /* APICore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A74B0221E8C27B00D32CBF /* APICore.framework */; };
 		03A74B0721E8C27B00D32CBF /* APICore.h in Headers */ = {isa = PBXBuildFile; fileRef = 03A74B0521E8C27B00D32CBF /* APICore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03A74B7A21E8CDF300D32CBF /* APIServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A74B7921E8CDF300D32CBF /* APIServiceType.swift */; };
+		03CF07B3220C64190011F4EB /* Dictionary+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF07B2220C64190011F4EB /* Dictionary+.swift */; };
 		03E3A9A42203103E0005A0A1 /* ReqresUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9A32203103E0005A0A1 /* ReqresUserAPI.swift */; };
 		03E3A9A62203108D0005A0A1 /* ReqresUserMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9A52203108D0005A0A1 /* ReqresUserMethods.swift */; };
 		03E3A9AA220314B10005A0A1 /* MethodParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9A9220314B10005A0A1 /* MethodParams.swift */; };
@@ -64,6 +65,7 @@
 		03A74B0521E8C27B00D32CBF /* APICore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APICore.h; sourceTree = "<group>"; };
 		03A74B0621E8C27B00D32CBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03A74B7921E8CDF300D32CBF /* APIServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceType.swift; sourceTree = "<group>"; };
+		03CF07B2220C64190011F4EB /* Dictionary+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+.swift"; sourceTree = "<group>"; };
 		03E3A9A32203103E0005A0A1 /* ReqresUserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReqresUserAPI.swift; sourceTree = "<group>"; };
 		03E3A9A52203108D0005A0A1 /* ReqresUserMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReqresUserMethods.swift; sourceTree = "<group>"; };
 		03E3A9A9220314B10005A0A1 /* MethodParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodParams.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				03E3A9AD220318C90005A0A1 /* BinaryData.swift */,
 				03E3A9BB220333680005A0A1 /* Pluggins.swift */,
 				03E3A9AF220325450005A0A1 /* Aliases.swift */,
+				03CF07B2220C64190011F4EB /* Dictionary+.swift */,
 			);
 			path = APICore;
 			sourceTree = "<group>";
@@ -461,6 +464,7 @@
 				03739EBA21FF272200EC583E /* APICoreObjectContainer.swift in Sources */,
 				03739EBC21FF28AB00EC583E /* RequestBuilder.swift in Sources */,
 				03E3A9B0220325450005A0A1 /* Aliases.swift in Sources */,
+				03CF07B3220C64190011F4EB /* Dictionary+.swift in Sources */,
 				0372DEBE220B36C0001FCEB4 /* MockSampleData.swift in Sources */,
 				034354C82201CA110039090C /* APICoreError.swift in Sources */,
 				03739EB621FEF14F00EC583E /* APIService.swift in Sources */,
@@ -491,8 +495,8 @@
 			baseConfigurationReference = B44A2CF780F84566CB8B5918 /* Pods-APICoreTests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 3BVL9BNASU;
 				INFOPLIST_FILE = APICoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -512,7 +516,7 @@
 			baseConfigurationReference = AA7D941E875C15CAB0318F61 /* Pods-APICoreTests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = APICoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -655,7 +659,7 @@
 			baseConfigurationReference = D3A8C67476F300356715CE08 /* Pods-APICore.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -682,7 +686,7 @@
 			baseConfigurationReference = 883F8C7D167220DE3EE50BE6 /* Pods-APICore.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
