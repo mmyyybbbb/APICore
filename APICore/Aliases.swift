@@ -13,7 +13,7 @@ public typealias SessionManager = Alamofire.SessionManager
 public typealias BodyEncoding = ParameterEncoding
 public typealias MethodBodyEncoding = (APIHTTPMethod) -> BodyEncoding
 public typealias APIHTTPMethod = HTTPMethod
-public typealias MethodPath = (APIHTTPMethod, String)
+public typealias MethodPath = (httpMethod: APIHTTPMethod, path: String)
 public typealias JSONEncoding = Alamofire.JSONEncoding
 public typealias Plugin = PluginType
 public typealias AuthToken = String 
@@ -21,7 +21,7 @@ public typealias AuthToken = String
 public extension SessionManager {
     public static var instance: SessionManager {
         let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders =  SessionManager.defaultHTTPHeaders
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         let sessionManager = SessionManager(configuration: configuration)
         sessionManager.startRequestsImmediately = false
         return sessionManager

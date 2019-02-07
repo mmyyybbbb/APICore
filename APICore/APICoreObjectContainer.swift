@@ -35,12 +35,12 @@ public final class APICoreObjectContainer {
        configurators.append(configurator)
     }
     
-    public func register<S:APIServiceType>(configurator: APIServiceConfiguratorType, for service: S.Type) {
+    public func register<S: APIServiceType>(configurator: APIServiceConfiguratorType, for service: S.Type) {
         let key = "\(S.Method.self)"
         serviceConfigurators[key] = configurator
     }
     
-    func resolveOrRegisterService<S:APIServiceType>() -> S {
+    func resolveOrRegisterService<S: APIServiceType>() -> S {
         let key = "\(S.self)"
         
         if let service = services[key] {
@@ -57,15 +57,15 @@ public final class APICoreObjectContainer {
     }
     
     func resolveServiceConfigurator<C:APIServiceConfiguratorType>() -> C? {
-        guard let configurator = configurators.first(where: {$0 is C}) as? C else {
-            error("\(C.self) такой конфигуратор не зарегестрирован в APICoreObjectContainer")
+        guard let configurator = configurators.first(where: { $0 is C }) as? C else {
+            error("\(C.self) такой конфигуратор не зарегистрирован в APICoreObjectContainer")
             return nil
         }
         
         return configurator
     }
     
-    func resolveServiceConfigurator<C:APIServiceConfiguratorType, S:APIServiceType>(for service: S.Type) -> C? {
+    func resolveServiceConfigurator<C: APIServiceConfiguratorType, S: APIServiceType>(for service: S.Type) -> C? {
         let key = "\(S.Method.self)"
         
         guard let configurator = serviceConfigurators[key] as? C else {

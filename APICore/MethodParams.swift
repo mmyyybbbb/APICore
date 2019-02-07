@@ -15,11 +15,11 @@ public struct MethodParams {
         self.urlParams = inUrl
     }
     
-    public mutating func body<T: Any>(_ key: String, _ value: T ) {
+    public mutating func body<T: Any>(_ key: String, _ value: T) {
         bodyParams[key] = value
     }
     
-    public mutating func url<T: Any>(_ key: String, _ value: T ) {
+    public mutating func url<T: Any>(_ key: String, _ value: T) {
         urlParams[key] = value
     }
 }

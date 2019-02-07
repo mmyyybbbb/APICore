@@ -11,8 +11,7 @@ import Moya
 public final class Plugins {
     
     public static func logger() -> PluginType {
-        return NetworkLoggerPlugin(verbose: true, cURL: true,
-                            responseDataFormatter: JSONResponseDataFormatter)
+        return NetworkLoggerPlugin(verbose: true, cURL: true, responseDataFormatter: JSONResponseDataFormatter)
     }
     
     private static func JSONResponseDataFormatter(_ data: Data) -> Data {

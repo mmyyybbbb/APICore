@@ -7,7 +7,7 @@
 //
 import Moya
 
-open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: APIServiceMethod, TConfigurator:APIServiceConfiguratorType   {
+open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: APIServiceMethod, TConfigurator: APIServiceConfiguratorType   {
  
     public typealias Method = TMethod
     public typealias Configurator = TConfigurator
@@ -73,7 +73,7 @@ fileprivate extension APIService {
         
         return Endpoint(url: fullUrl.absoluteString,
                         sampleResponseClosure: mockClosure,
-                        method: method.methodPath.0,
+                        method: method.methodPath.httpMethod,
                         task: buildTask(method),
                         httpHeaderFields: fullHeaders)
         
@@ -106,7 +106,7 @@ fileprivate extension APIService {
             return methodBodyEncoding
         }
         
-        let httpMethod = method.methodPath.0
+        let httpMethod = method.methodPath.httpMethod
         if let allServiceBodyEncoding = allServiceBodyEncoding {
             return allServiceBodyEncoding(httpMethod)
         }
@@ -155,7 +155,7 @@ fileprivate extension APIService {
     private func buildFullUrl(_ method: Method) -> URL {
         let fullUrl = configuratorStrong.baseUrl
             .appendingPathComponent(urlServicePathComponent)
-            .appendingPathComponent(method.methodPath.1)
+            .appendingPathComponent(method.methodPath.path)
         
         return fullUrl
     }

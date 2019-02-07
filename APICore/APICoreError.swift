@@ -6,7 +6,6 @@
 //  Copyright © 2019 BCS. All rights reserved.
 //
 
-
 func fatal(_ text: String) -> Never {
     fatalError("APICore[fatal]: \(text)")
 }
