@@ -9,5 +9,3 @@
 public protocol MockSampleData {
     var sampleData: String? { get }
 }
-
-

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		034354C82201CA110039090C /* APICoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034354C72201CA110039090C /* APICoreError.swift */; };
 		034354CA220204580039090C /* MockKeyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034354C9220204580039090C /* MockKeyType.swift */; };
-		0372DEBE220B36C0001FCEB4 /* MockSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0372DEBD220B36C0001FCEB4 /* MockSampleData.swift */; };
 		03739EB621FEF14F00EC583E /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739EB521FEF14F00EC583E /* APIService.swift */; };
 		03739EB821FEF17C00EC583E /* APIServiceMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739EB721FEF17C00EC583E /* APIServiceMethod.swift */; };
 		03739EBA21FF272200EC583E /* APICoreObjectContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739EB921FF272200EC583E /* APICoreObjectContainer.swift */; };
@@ -21,6 +20,7 @@
 		03A74B0721E8C27B00D32CBF /* APICore.h in Headers */ = {isa = PBXBuildFile; fileRef = 03A74B0521E8C27B00D32CBF /* APICore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03A74B7A21E8CDF300D32CBF /* APIServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A74B7921E8CDF300D32CBF /* APIServiceType.swift */; };
 		03CF07B3220C64190011F4EB /* Dictionary+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF07B2220C64190011F4EB /* Dictionary+.swift */; };
+		03CF07B4220C67140011F4EB /* MockSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0372DEBD220B36C0001FCEB4 /* MockSampleData.swift */; };
 		03E3A9A42203103E0005A0A1 /* ReqresUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9A32203103E0005A0A1 /* ReqresUserAPI.swift */; };
 		03E3A9A62203108D0005A0A1 /* ReqresUserMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9A52203108D0005A0A1 /* ReqresUserMethods.swift */; };
 		03E3A9AA220314B10005A0A1 /* MethodParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3A9A9220314B10005A0A1 /* MethodParams.swift */; };
@@ -76,7 +76,7 @@
 		03E3A9B5220330680005A0A1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		03E3A9B72203318B0005A0A1 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		03E3A9BB220333680005A0A1 /* Pluggins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pluggins.swift; sourceTree = "<group>"; };
-		03E3AA67220879A90005A0A1 /* APICore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = APICore.podspec; sourceTree = "<group>"; };
+		03E3AA67220879A90005A0A1 /* APICore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = APICore.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		03E630F3220AEA470082685F /* AuthStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStrategy.swift; sourceTree = "<group>"; };
 		03E630F6220AEAE00082685F /* AuthTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenProvider.swift; sourceTree = "<group>"; };
 		07584CA929F6A94467FB6216 /* Pods_APICore_APICoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore_APICoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -465,7 +465,6 @@
 				03739EBC21FF28AB00EC583E /* RequestBuilder.swift in Sources */,
 				03E3A9B0220325450005A0A1 /* Aliases.swift in Sources */,
 				03CF07B3220C64190011F4EB /* Dictionary+.swift in Sources */,
-				0372DEBE220B36C0001FCEB4 /* MockSampleData.swift in Sources */,
 				034354C82201CA110039090C /* APICoreError.swift in Sources */,
 				03739EB621FEF14F00EC583E /* APIService.swift in Sources */,
 				03739EC222008E0900EC583E /* DefaultAPISeviceConfigurator.swift in Sources */,
@@ -475,6 +474,7 @@
 				034354CA220204580039090C /* MockKeyType.swift in Sources */,
 				03739EB821FEF17C00EC583E /* APIServiceMethod.swift in Sources */,
 				03E3A9AA220314B10005A0A1 /* MethodParams.swift in Sources */,
+				03CF07B4220C67140011F4EB /* MockSampleData.swift in Sources */,
 				03A74B7A21E8CDF300D32CBF /* APIServiceType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
