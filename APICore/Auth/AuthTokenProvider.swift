@@ -6,6 +6,6 @@
 //  Copyright © 2019 BCS. All rights reserved.
 //
 
-public protocol AuthTokenProvider {
+public protocol AuthTokenProvider: class {
     var token: AuthToken? { get }
 }

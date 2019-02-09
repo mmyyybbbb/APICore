@@ -6,13 +6,14 @@
 //  Copyright © 2019 BCS. All rights reserved.
 //
 
-open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
+open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenProvider {
     
     public var sessionManager: SessionManager
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
     public var plugins: [Plugin] = []
-    public var authTokenProvider: AuthTokenProvider? = nil
+    public weak var authTokenProvider: AuthTokenProvider? = nil
+    public private(set) var token: AuthToken?
     
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl
@@ -29,6 +30,11 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
         self.sessionManager = sessionManager
         self.bodyEncoding = bodyEncoding
         self.plugins = plugins
+    }
+    
+    public func setTokenProviderToSelf(with token: AuthToken) {
+        authTokenProvider = self
+        self.token = token
     }
 }
 
