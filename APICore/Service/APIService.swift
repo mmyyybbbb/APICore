@@ -39,6 +39,13 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
 
 //MARK: Public+
 public extension  APIService {
+    var authTokenProvided: Bool {
+        guard let serviceConfigurator = APIService<TMethod, TConfigurator>.configurator else {
+            return false
+        }
+        return serviceConfigurator.authTokenProvider?.token != nil
+    }
+    
     func setMock(for key: Method.MockKey, value: String) {
         if let data = value.data(using: .utf8) {
             actualMocks[key] = data
