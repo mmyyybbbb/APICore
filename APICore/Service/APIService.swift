@@ -103,12 +103,16 @@ fileprivate extension APIService {
             return .uploadCompositeMultipart([formData], urlParameters: methodParams.urlParams)
         }
         
+        if methodParams.bodyParams.isEmpty {
+            return .requestParameters(parameters: methodParams.urlParams, encoding: getBodyEncoding(method))
+        }
+        
         return .requestCompositeParameters(bodyParameters: methodParams.bodyParams,
                                            bodyEncoding: getBodyEncoding(method),
                                            urlParameters: methodParams.urlParams)
     }
     
-    func getBodyEncoding(_ method: Method) -> ParameterEncoding {
+    func getBodyEncoding(_ method: Method) -> BodyEncoding {
         if let methodBodyEncoding = method.overrideBodyEncoding {
             return methodBodyEncoding
         }
