@@ -18,12 +18,14 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenP
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl
         sessionManager = SessionManager.instance
-        bodyEncoding = { _ in JSONEncoding.default }
+        
+        let defaultBodyEncoding: MethodBodyEncoding = { $0 == .get ? URLEncoding.default : JSONEncoding.default }
+        bodyEncoding = defaultBodyEncoding
     }
     
     public init(baseUrl: URL,
                 sessionManager: SessionManager = SessionManager.instance,
-                bodyEncoding: @escaping MethodBodyEncoding = { _ in JSONEncoding.default },
+                bodyEncoding: @escaping MethodBodyEncoding = { $0 == .get ? URLEncoding.default : JSONEncoding.default },
                 plugins: [Plugin] = []) {
         
         self.baseUrl = baseUrl
