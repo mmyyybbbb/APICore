@@ -10,7 +10,6 @@ Pod::Spec.new do |s|
   s.swift_version = '4.2'
   s.module_name  = 'APICore'  
   s.source_files  = 'APICore/**/*.swift'
-  s.resources = 'APICore/Resources/*.xcassets'  
   s.dependency 'Moya/RxSwift'
   s.dependency 'RxSwift' 
   s.dependency 'Moya'
