@@ -19,13 +19,13 @@ open class RequestBuilder<S: APIServiceType>  {
     }
   
     public func request() -> Single<Response> {
-        return S.shared.provider.rx.request(method)
+        return S.shared.provider.rx.request(method, callbackQueue: DispatchQueue.global())
     }
     
-    public func map<T:Decodable>() -> Single<T> {
-        return request().map { response in
-            return try JSONDecoder().decode(T.self, from: response.data)
-        }
+    public func requestWithMap<T:Decodable>() -> Single<T> {
+        return request()
+            .map { response in return try JSONDecoder().decode(T.self, from: response.data) }
+            .observeOn(MainScheduler.instance)
     }
     
 }
