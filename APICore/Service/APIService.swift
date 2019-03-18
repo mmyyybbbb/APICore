@@ -63,6 +63,10 @@ public extension  APIService {
     func mockData(for key: Method.MockKey) -> Data? {
         return actualMocks[key]
     }
+    
+    func isMocked(_ key: Method.MockKey) -> Bool {
+        return actualMocks.keys.contains(key)
+    }
 }
 
 //MARK: Public+
