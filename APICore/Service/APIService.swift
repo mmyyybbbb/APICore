@@ -59,6 +59,10 @@ public extension  APIService {
     func removeMock(for key: Method.MockKey) {
         actualMocks.removeValue(forKey: key)
     }
+    
+    func mockData(for key: Method.MockKey) -> Data? {
+        return actualMocks[key]
+    }
 }
 
 //MARK: Public+
