@@ -17,11 +17,5 @@ public protocol APIServiceConfiguratorType: class {
     var authTokenProvider: AuthTokenProvider? { get }
 }
 
-extension APIServiceConfiguratorType {
-    public var authTokenProvider: AuthTokenProvider? { return nil } 
-    public var baseHeaders: [String: String]? { return nil }
-    public var plugins: [Plugin] { return [] } 
-}
-
 
 
