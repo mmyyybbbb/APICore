@@ -5,14 +5,17 @@ inhibit_all_warnings!
 source 'https://gitlab.com/BCSBroker/iOS/brokerrepo.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
+def pods
+  pod 'Moya/RxSwift', '~> 12.0.1'
+  pod 'Moya', '~> 12.0.1'
+end
+
 target :APICore do
-  pod 'Moya/RxSwift'
-  pod 'Moya'
+  pods
   
   target :APICoreTests do
     inherit! :search_paths
-    pod 'Moya/RxSwift'
-    pod 'RxBlocking'
-    pod 'Moya'
+    pods
+    pod 'RxBlocking', '~> 4.4.0'
   end
 end
