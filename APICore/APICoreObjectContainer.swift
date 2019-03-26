@@ -56,7 +56,7 @@ public final class APICoreObjectContainer {
         return service
     }
     
-    func resolveServiceConfigurator<C:APIServiceConfiguratorType>() -> C? {
+    public func resolveServiceConfigurator<C:APIServiceConfiguratorType>() -> C? {
         guard let configurator = configurators.first(where: { $0 is C }) as? C else {
             error("\(C.self) такой конфигуратор не зарегистрирован в APICoreObjectContainer")
             return nil
