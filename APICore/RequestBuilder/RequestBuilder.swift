@@ -27,7 +27,13 @@ open class RequestBuilder<S: APIServiceType>  {
             .map { response in return try JSONDecoder().decode(T.self, from: response.data) }
             .observeOn(MainScheduler.instance)
     }
-    
+
+    public func requestWithVoid() -> Single<Void> {
+        return request()
+            .map { response in return Void() }
+            .observeOn(MainScheduler.instance)
+    }
+
 }
 
 
