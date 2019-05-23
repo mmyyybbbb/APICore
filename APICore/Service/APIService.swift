@@ -112,7 +112,9 @@ fileprivate extension APIService {
         }
         
         if methodParams.bodyParams.isEmpty {
-            return .requestParameters(parameters: methodParams.urlParams, encoding: URLEncoding.default)
+            return .requestCompositeParameters(bodyParameters: methodParams.bodyParams,
+                                               bodyEncoding: JSONEncoding.default,
+                                               urlParameters: methodParams.urlParams)
         }
         
         return .requestCompositeParameters(bodyParameters: methodParams.bodyParams,
