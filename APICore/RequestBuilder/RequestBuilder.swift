@@ -40,20 +40,6 @@ open class RequestBuilder<S: APIServiceType>  {
         return _request()
     }
     
-    /// depricated
-    public func requestWithMap<T:Decodable>() -> Single<T> {
-        return _request()
-            .map { response in return try JSONDecoder().decode(T.self, from: response.data) }
-            .observeOn(MainScheduler.instance)
-    }
-    
-    /// depricated
-    public func requestWithVoid() -> Single<Void> {
-        return _request()
-            .map { response in return Void() }
-            .observeOn(MainScheduler.instance)
-    }
-    
     private func _request() -> Single<Response> {
         
         let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext(extractNSError(from: $0)) }
