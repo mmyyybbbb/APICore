@@ -15,6 +15,7 @@ public protocol APIServiceConfiguratorType: class {
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
     var authTokenProvider: AuthTokenProvider? { get }
+    var requestsErrorBehavior: RequestErrorBehavior? { get }
 }
 
 

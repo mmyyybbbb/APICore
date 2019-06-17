@@ -17,6 +17,7 @@
 		03739EC222008E0900EC583E /* DefaultAPISeviceConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739EC122008E0900EC583E /* DefaultAPISeviceConfigurator.swift */; };
 		03739ECE22009B1100EC583E /* APICoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739ECD22009B1100EC583E /* APICoreTests.swift */; };
 		03739ED022009B1100EC583E /* APICore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A74B0221E8C27B00D32CBF /* APICore.framework */; };
+		039357B122B7F6C900BB2565 /* RequestErrorBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039357B022B7F6C900BB2565 /* RequestErrorBehavior.swift */; };
 		03A74B0721E8C27B00D32CBF /* APICore.h in Headers */ = {isa = PBXBuildFile; fileRef = 03A74B0521E8C27B00D32CBF /* APICore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03A74B7A21E8CDF300D32CBF /* APIServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A74B7921E8CDF300D32CBF /* APIServiceType.swift */; };
 		03CF07B3220C64190011F4EB /* Dictionary+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF07B2220C64190011F4EB /* Dictionary+.swift */; };
@@ -61,6 +62,7 @@
 		03739ECB22009B1000EC583E /* APICoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APICoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03739ECD22009B1100EC583E /* APICoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICoreTests.swift; sourceTree = "<group>"; };
 		03739ECF22009B1100EC583E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		039357B022B7F6C900BB2565 /* RequestErrorBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestErrorBehavior.swift; sourceTree = "<group>"; };
 		03A74B0221E8C27B00D32CBF /* APICore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APICore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		03A74B0521E8C27B00D32CBF /* APICore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APICore.h; sourceTree = "<group>"; };
 		03A74B0621E8C27B00D32CBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				034354C72201CA110039090C /* APICoreError.swift */,
 				034354C9220204580039090C /* MockKeyType.swift */,
 				03E3A9A9220314B10005A0A1 /* MethodParams.swift */,
+				039357B022B7F6C900BB2565 /* RequestErrorBehavior.swift */,
 				03E3A9AD220318C90005A0A1 /* BinaryData.swift */,
 				03E3A9BB220333680005A0A1 /* Pluggins.swift */,
 				03E3A9AF220325450005A0A1 /* Aliases.swift */,
@@ -460,6 +463,7 @@
 				03739EB821FEF17C00EC583E /* APIServiceMethod.swift in Sources */,
 				03E3A9AA220314B10005A0A1 /* MethodParams.swift in Sources */,
 				03CF07B4220C67140011F4EB /* MockSampleData.swift in Sources */,
+				039357B122B7F6C900BB2565 /* RequestErrorBehavior.swift in Sources */,
 				03A74B7A21E8CDF300D32CBF /* APIServiceType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

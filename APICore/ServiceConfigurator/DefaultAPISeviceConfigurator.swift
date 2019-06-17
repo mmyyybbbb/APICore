@@ -12,7 +12,9 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenP
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
     public var plugins: [Plugin] = []
-    public var baseHeaders: [String: String]? 
+    public var baseHeaders: [String: String]?
+    public var requestsErrorBehavior: RequestErrorBehavior?
+    
     public weak var authTokenProvider: AuthTokenProvider? = nil
     public private(set) var token: AuthToken?
     
@@ -28,13 +30,15 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenP
                 sessionManager: SessionManager = SessionManager.instance,
                 bodyEncoding: @escaping MethodBodyEncoding = { $0 == .get ? URLEncoding.default : JSONEncoding.default },
                 plugins: [Plugin] = [],
-                headers:  [String: String]?  = nil ) {
+                headers:  [String: String]?  = nil,
+                requestsErrorBehavior: RequestErrorBehavior? = nil) {
         
         self.baseUrl = baseUrl
         self.sessionManager = sessionManager
         self.bodyEncoding = bodyEncoding
         self.plugins = plugins
         self.baseHeaders = headers
+        self.requestsErrorBehavior = requestsErrorBehavior
     }
     
     public func setTokenProviderToSelf(with token: AuthToken) {

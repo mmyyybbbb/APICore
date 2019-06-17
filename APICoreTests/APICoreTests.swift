@@ -53,7 +53,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         let configurator = ReqresServicesConfigurator(baseUrl: "https://google.com")
         APICoreObjectContainer.instanceLazyInit.register(configurator: configurator, for: ReqresUserAPI.self)
         
-        let behavior: RequestBuilderErrorBehavior = .autoRepeatWhen(nsUrlErrorDomainCodeIn: [NSURLErrorNotConnectedToInternet],
+        let behavior: RequestErrorBehavior = .autoRepeatWhen(nsUrlErrorDomainCodeIn: [NSURLErrorNotConnectedToInternet],
                                                                     maxRepeatCount: 3,
                                                                     repeatAfter: 5)
         
@@ -61,7 +61,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
             .subscribe(onNext: { error in print("[GET] \(error)") })
             .disposed(by: bag)
         
-        let request = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request(onErrorBehavior: behavior)
+        let request = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request(forceErrorBehavior: behavior)
         let result = request.toBlocking().materialize()
         
         
