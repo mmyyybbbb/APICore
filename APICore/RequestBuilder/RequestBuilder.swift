@@ -90,6 +90,15 @@ public extension Single where Element == Response {
             .asSingle()
             .observeOn(scheduler)
     }
+
+    func mapToWithHeader<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> (Single<(T, [AnyHashable: Any])>) {
+        return self
+            .asObservable()
+            .map { response in return (try JSONDecoder().decode(T.self, from: response.data),
+                                       response.response?.allHeaderFields ?? [:]) }
+            .asSingle()
+            .observeOn(scheduler)
+    }
     
     func mapToVoid(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<Void> {
         return self
