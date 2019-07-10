@@ -172,10 +172,28 @@ fileprivate extension APIService {
     
     
     private func buildFullUrl(_ method: Method) -> URL {
-        let fullUrl = configuratorStrong.baseUrl
+        
+        // Когда путь метода начинается с "/", то относительный путь в базовом урл игнорируется
+        //
+        // Например:
+        // - базовой урл: "https://my.broker.ru/services"
+        // - путь метода: "/services/api/v1/accounts/iia/agreements/9ddc90c0-bed6-4bae-a87b-8a285ab7c6c9/status"
+        // - конечный урл: "https://my.broker.ru/services/api/v1/accounts/iia/agreements/9ddc90c0-bed6-4bae-a87b-8a285ab7c6c9/status"
+        //
+        // то есть, не будет повторяться 2 раза /services/serivces
+        //
+        if method.methodPath.path.starts(with: "/") {
+            let baseUrl = configuratorStrong.baseUrl
+            let relativePath = configuratorStrong.baseUrl.relativePath
+            let host = baseUrl.absoluteString.replacingOccurrences(of: relativePath, with: "")
+            
+            if let baseUrl = URL(string: host) {
+                return baseUrl.appendingPathComponent(method.methodPath.path)
+            }
+        }
+        
+        return configuratorStrong.baseUrl
             .appendingPathComponent(urlServicePathComponent)
             .appendingPathComponent(method.methodPath.path)
-        
-        return fullUrl
     }
 }
