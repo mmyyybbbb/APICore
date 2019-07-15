@@ -29,7 +29,8 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
         let configurator = configuratorStrong
         var plugins = configurator.plugins
         
-        if case AuthStrategy.authorizationHeader = self.authStrategy, configurator.plugins.contains(where: { $0 is AccessTokenPlugin}) {
+        if case AuthStrategy.authorizationHeader = self.authStrategy,
+            configurator.plugins.contains(where: { $0 is AccessTokenPlugin}) == false {
             let accessPlugin = AccessTokenPlugin(tokenClosure: { [weak configurator] in
                 return configurator?.authTokenProvider?.token ?? ""
             })
