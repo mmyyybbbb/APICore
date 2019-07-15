@@ -27,10 +27,19 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
     
     lazy public var provider: MoyaProvider<TMethod> = {
         let configurator = configuratorStrong
+        var plugins = configurator.plugins
+        
+        if case AuthStrategy.authorizationHeader = self.authStrategy, configurator.plugins.contains(where: { $0 is AccessTokenPlugin}) {
+            let accessPlugin = AccessTokenPlugin(tokenClosure: { [weak configurator] in
+                return configurator?.authTokenProvider?.token ?? ""
+            })
+            plugins.append(accessPlugin)
+        }
+        
         return MoyaProvider<TMethod>(endpointClosure: endpointBuilder,
                                      stubClosure: stubBehaviorBuilder,
                                      manager: configurator.sessionManager,
-                                     plugins: configurator.plugins)
+                                     plugins: plugins)
  
     }()
     
