@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'APICore'
-  s.version          = '1.0.15'
+  s.version          = '1.0.16'
   s.summary          = 'Модуль APICore'
   s.homepage         = 'https://gitlab.com/BCSBroker/iOS/apicore'
   s.author           = 'BCS'
