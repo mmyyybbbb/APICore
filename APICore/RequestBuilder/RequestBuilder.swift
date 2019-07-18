@@ -83,7 +83,7 @@ fileprivate func extractNSError(from error: Error) -> NSError {
 
 public extension Single where Element == Response {
     
-    func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<T> {
+    func mapTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<T> {
         return self
             .asObservable()
             .map { response in return try JSONDecoder().decode(T.self, from: response.data) }
@@ -95,6 +95,37 @@ public extension Single where Element == Response {
         return self
             .asObservable()
             .map { response in return Void() }
+            .asSingle()
+            .observeOn(scheduler)
+    }
+    
+    func mapWithRedirectTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<(data:T, redirect: MethodRedirect)> {
+        return self
+            .asObservable()
+            .map { response in
+                let data = try JSONDecoder().decode(T.self, from: response.data)
+                let redirect = try MethodRedirect(response.response)
+                return (data: data, redirect: redirect)
+        }
+        .asSingle()
+            .observeOn(scheduler)
+    }
+    
+    func mapWithRedirectIfHasTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<(data:T, redirect: MethodRedirect?)> {
+        return self
+            .asObservable()
+            .map { response in
+                let data = try JSONDecoder().decode(T.self, from: response.data)
+                let redirect = try? MethodRedirect(response.response)
+                return (data: data, redirect: redirect)
+        }
+        .asSingle().observeOn(scheduler)
+    }
+    
+    func mapToRedirect(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<MethodRedirect> {
+        return self
+            .asObservable()
+            .map { try MethodRedirect($0.response) }
             .asSingle()
             .observeOn(scheduler)
     }
