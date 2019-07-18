@@ -83,7 +83,7 @@ fileprivate func extractNSError(from error: Error) -> NSError {
 
 public extension Single where Element == Response {
     
-    func mapTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<T> {
+    func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<T> {
         return self
             .asObservable()
             .map { response in return try JSONDecoder().decode(T.self, from: response.data) }
