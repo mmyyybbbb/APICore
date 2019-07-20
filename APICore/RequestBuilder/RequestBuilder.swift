@@ -88,7 +88,14 @@ public extension Single where Element == Response {
         
         return self
             .asObservable()
-            .map { response in return try decoder.decode(T.self, from: response.data) }
+            .map { response in
+                do {
+                    return try decoder.decode(T.self, from: response.data)
+                } catch {
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+                    throw error
+                }
+            }
             .asSingle()
             .observeOn(scheduler)
     }
@@ -107,9 +114,14 @@ public extension Single where Element == Response {
         return self
             .asObservable()
             .map { response in
-                let data = try decoder.decode(T.self, from: response.data)
-                let redirect = try MethodRedirect(response.response)
-                return (data: data, redirect: redirect)
+                do {
+                    let data = try decoder.decode(T.self, from: response.data)
+                    let redirect = try MethodRedirect(response.response)
+                    return (data: data, redirect: redirect)
+                } catch {
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+                    throw error
+                }
         }
         .asSingle()
             .observeOn(scheduler)
@@ -121,9 +133,14 @@ public extension Single where Element == Response {
         return self
             .asObservable()
             .map { response in
-                let data = try decoder.decode(T.self, from: response.data)
-                let redirect = try? MethodRedirect(response.response)
-                return (data: data, redirect: redirect)
+                do {
+                    let data = try decoder.decode(T.self, from: response.data)
+                    let redirect = try? MethodRedirect(response.response)
+                    return (data: data, redirect: redirect)
+                } catch {
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+                    throw error
+                }
         }
         .asSingle().observeOn(scheduler)
     }
