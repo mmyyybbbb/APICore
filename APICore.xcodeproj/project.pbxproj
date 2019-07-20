@@ -46,6 +46,7 @@
 		03E630F7220AEAE00082685F /* AuthTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E630F6220AEAE00082685F /* AuthTokenProvider.swift */; };
 		5D1442CEC60E8FED2AFA8469 /* Pods_APICore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 103ADD96DE0CF548166B15FA /* Pods_APICore.framework */; };
 		6D556D2C22E002AC0028FAE5 /* MethodRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D556D2B22E002AC0028FAE5 /* MethodRedirect.swift */; };
+		6DFE548022E2AB2200AB684E /* JSONDecoder+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFE547F22E2AB2200AB684E /* JSONDecoder+.swift */; };
 		F06659A4D60C4C24CF651030 /* Pods_APICoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D523B786806740180716C9 /* Pods_APICoreTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,7 @@
 		07584CA929F6A94467FB6216 /* Pods_APICore_APICoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore_APICoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		103ADD96DE0CF548166B15FA /* Pods_APICore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D556D2B22E002AC0028FAE5 /* MethodRedirect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MethodRedirect.swift; sourceTree = "<group>"; };
+		6DFE547F22E2AB2200AB684E /* JSONDecoder+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+.swift"; sourceTree = "<group>"; };
 		883F8C7D167220DE3EE50BE6 /* Pods-APICore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICore.release.xcconfig"; path = "Target Support Files/Pods-APICore/Pods-APICore.release.xcconfig"; sourceTree = "<group>"; };
 		AA7D941E875C15CAB0318F61 /* Pods-APICoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICoreTests.release.xcconfig"; path = "Target Support Files/Pods-APICoreTests/Pods-APICoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		B44A2CF780F84566CB8B5918 /* Pods-APICoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICoreTests.debug.xcconfig"; path = "Target Support Files/Pods-APICoreTests/Pods-APICoreTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				03A5727522DF97FC00B182E6 /* KeyedDecodingContainer+.swift */,
 				03A5727722DF97FC00B182E6 /* JSONCodingKeys.swift */,
 				03A5728122DF98BF00B182E6 /* Date+.swift */,
+				6DFE547F22E2AB2200AB684E /* JSONDecoder+.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				03CF07B4220C67140011F4EB /* MockSampleData.swift in Sources */,
 				03A5728022DF97FC00B182E6 /* JSONCodingKeys.swift in Sources */,
 				03A5727B22DF97FC00B182E6 /* String+.swift in Sources */,
+				6DFE548022E2AB2200AB684E /* JSONDecoder+.swift in Sources */,
 				039357B122B7F6C900BB2565 /* RequestErrorBehavior.swift in Sources */,
 				03A5727922DF97FC00B182E6 /* Sequence+.swift in Sources */,
 				03A74B7A21E8CDF300D32CBF /* APIServiceType.swift in Sources */,

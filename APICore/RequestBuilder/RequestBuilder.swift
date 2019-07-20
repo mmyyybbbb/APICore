@@ -83,10 +83,12 @@ fileprivate func extractNSError(from error: Error) -> NSError {
 
 public extension Single where Element == Response {
     
-    func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<T> {
+    func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance,
+                            with decoder: JSONDecoder = .default) -> Single<T> {
+        
         return self
             .asObservable()
-            .map { response in return try JSONDecoder().decode(T.self, from: response.data) }
+            .map { response in return try decoder.decode(T.self, from: response.data) }
             .asSingle()
             .observeOn(scheduler)
     }
@@ -99,11 +101,13 @@ public extension Single where Element == Response {
             .observeOn(scheduler)
     }
     
-    func mapWithRedirectTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<(data:T, redirect: MethodRedirect)> {
+    func mapWithRedirectTo<T:Decodable>(_ type: T.Type,
+                                        on scheduler: ImmediateSchedulerType = MainScheduler.instance,
+                                        with decoder: JSONDecoder = .default) -> Single<(data:T, redirect: MethodRedirect)> {
         return self
             .asObservable()
             .map { response in
-                let data = try JSONDecoder().decode(T.self, from: response.data)
+                let data = try decoder.decode(T.self, from: response.data)
                 let redirect = try MethodRedirect(response.response)
                 return (data: data, redirect: redirect)
         }
@@ -111,11 +115,13 @@ public extension Single where Element == Response {
             .observeOn(scheduler)
     }
     
-    func mapWithRedirectIfHasTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<(data:T, redirect: MethodRedirect?)> {
+    func mapWithRedirectIfHasTo<T:Decodable>(_ type: T.Type,
+                                             on scheduler: ImmediateSchedulerType = MainScheduler.instance,
+                                             with decoder: JSONDecoder = .default) -> Single<(data:T, redirect: MethodRedirect?)> {
         return self
             .asObservable()
             .map { response in
-                let data = try JSONDecoder().decode(T.self, from: response.data)
+                let data = try decoder.decode(T.self, from: response.data)
                 let redirect = try? MethodRedirect(response.response)
                 return (data: data, redirect: redirect)
         }
