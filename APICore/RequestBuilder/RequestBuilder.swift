@@ -81,6 +81,13 @@ fileprivate func extractNSError(from error: Error) -> NSError {
     return error as NSError
 }
 
+/// Ошибка парсинга данных
+public struct DecodeError: Error {
+    public let error: Error
+    public let response: Response
+    public let targetTypeDescription: Any
+}
+
 public extension Single where Element == Response {
     
     func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance,
@@ -92,7 +99,8 @@ public extension Single where Element == Response {
                 do {
                     return try decoder.decode(T.self, from: response.data)
                 } catch {
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
                     throw error
                 }
             }
@@ -119,7 +127,8 @@ public extension Single where Element == Response {
                     let redirect = try MethodRedirect(response.response)
                     return (data: data, redirect: redirect)
                 } catch {
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
                     throw error
                 }
         }
@@ -138,7 +147,8 @@ public extension Single where Element == Response {
                     let redirect = try? MethodRedirect(response.response)
                     return (data: data, redirect: redirect)
                 } catch {
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
                     throw error
                 }
         }
