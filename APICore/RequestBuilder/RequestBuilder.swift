@@ -90,6 +90,25 @@ public struct DecodeError: Error {
 
 public extension Single where Element == Response {
     
+    func mapTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance,
+                            with decoder: JSONDecoder = .default) -> Single<T> {
+        
+        return self
+            .asObservable()
+            .map { response in
+                do {
+                    return try decoder.decode(T.self, from: response.data)
+                } catch {
+                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
+                    throw error
+                }
+        }
+        .asSingle()
+            .observeOn(scheduler)
+    }
+    
+    
     func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance,
                             with decoder: JSONDecoder = .default) -> Single<T> {
         
