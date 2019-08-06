@@ -18,7 +18,6 @@
 		03739ECE22009B1100EC583E /* APICoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739ECD22009B1100EC583E /* APICoreTests.swift */; };
 		03739ED022009B1100EC583E /* APICore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A74B0221E8C27B00D32CBF /* APICore.framework */; };
 		039357B122B7F6C900BB2565 /* RequestErrorBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039357B022B7F6C900BB2565 /* RequestErrorBehavior.swift */; };
-		03A5727822DF97FC00B182E6 /* Single+map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A5726F22DF97FC00B182E6 /* Single+map.swift */; };
 		03A5727922DF97FC00B182E6 /* Sequence+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A5727022DF97FC00B182E6 /* Sequence+.swift */; };
 		03A5727A22DF97FC00B182E6 /* UnkeyedDecodingContainer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A5727122DF97FC00B182E6 /* UnkeyedDecodingContainer+.swift */; };
 		03A5727B22DF97FC00B182E6 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A5727222DF97FC00B182E6 /* String+.swift */; };
@@ -76,7 +75,6 @@
 		03739ECD22009B1100EC583E /* APICoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICoreTests.swift; sourceTree = "<group>"; };
 		03739ECF22009B1100EC583E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		039357B022B7F6C900BB2565 /* RequestErrorBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestErrorBehavior.swift; sourceTree = "<group>"; };
-		03A5726F22DF97FC00B182E6 /* Single+map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Single+map.swift"; sourceTree = "<group>"; };
 		03A5727022DF97FC00B182E6 /* Sequence+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sequence+.swift"; sourceTree = "<group>"; };
 		03A5727122DF97FC00B182E6 /* UnkeyedDecodingContainer+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UnkeyedDecodingContainer+.swift"; sourceTree = "<group>"; };
 		03A5727222DF97FC00B182E6 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 			isa = PBXGroup;
 			children = (
 				03CF07B2220C64190011F4EB /* Dictionary+.swift */,
-				03A5726F22DF97FC00B182E6 /* Single+map.swift */,
 				03A5727022DF97FC00B182E6 /* Sequence+.swift */,
 				03A5727122DF97FC00B182E6 /* UnkeyedDecodingContainer+.swift */,
 				03A5727222DF97FC00B182E6 /* String+.swift */,
@@ -494,7 +491,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03A5727822DF97FC00B182E6 /* Single+map.swift in Sources */,
 				03A5727E22DF97FC00B182E6 /* KeyedDecodingContainer+.swift in Sources */,
 				03A5727F22DF97FC00B182E6 /* APIServiceType+.swift in Sources */,
 				03E630F4220AEA470082685F /* AuthStrategy.swift in Sources */,
