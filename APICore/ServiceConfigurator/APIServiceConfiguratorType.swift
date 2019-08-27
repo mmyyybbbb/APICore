@@ -7,6 +7,7 @@
 //
 
 import Moya
+import RxSwift
 
 public protocol APIServiceConfiguratorType: class {
     var baseUrl: URL { get }
@@ -14,8 +15,9 @@ public protocol APIServiceConfiguratorType: class {
     var sessionManager: SessionManager { get }
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
-    var authTokenProvider: AuthTokenProvider? { get }
+    var authTokenProvider: AuthTokenProvider? { get set }
     var requestsErrorBehavior: RequestErrorBehavior? { get }
+    var whenErrorReturnSingle: ((Error) throws -> Single<Void>)? { get set}
 }
 
 

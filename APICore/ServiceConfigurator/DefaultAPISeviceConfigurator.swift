@@ -5,16 +5,16 @@
 //  Created by alexej_ne on 29/01/2019.
 //  Copyright © 2019 BCS. All rights reserved.
 //
+import RxSwift
 
 open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenProvider {
-    
+    public var whenErrorReturnSingle: ((Error) throws -> Single<Void>)?
     public var sessionManager: SessionManager
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
     public var plugins: [Plugin] = []
     public var baseHeaders: [String: String]?
     public var requestsErrorBehavior: RequestErrorBehavior?
-    
     public weak var authTokenProvider: AuthTokenProvider? = nil
     public private(set) var token: AuthToken?
     

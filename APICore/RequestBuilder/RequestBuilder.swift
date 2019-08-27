@@ -7,7 +7,6 @@
 //
 import Moya
 import RxSwift
-
 import Foundation
 
 open class RequestBuilder<S: APIServiceType>  {
@@ -44,12 +43,24 @@ open class RequestBuilder<S: APIServiceType>  {
         
         let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext(extractNSError(from: $0)) }
         
-        return S.shared.provider.rx
-            .request(method, callbackQueue: DispatchQueue.global())
-            .do(onError: notifyAboutError)
+        func req() -> Single<Response> {
+            return S.shared.provider.rx
+                .request(method, callbackQueue: DispatchQueue.global())
+                .do(onError: notifyAboutError)
+        }
+        
+        if let catchError = S.configurator?.whenErrorReturnSingle {
+            func onCatch(error: Error) throws -> Single<Response> {
+                return try catchError(error).flatMap { req() }
+            }
+            return req().catchError(onCatch)
+        } else {
+            return req()
+        }
+        
     }
     
-    private func onCatchError(behavior: RequestErrorBehavior, error: Error) throws  -> Single<Response> {
+    private func  onCatchError(behavior: RequestErrorBehavior, error: Error) throws  -> Single<Response> {
         let nsError = extractNSError(from: error)
         
         guard nsError.domain == NSURLErrorDomain else { throw error }
