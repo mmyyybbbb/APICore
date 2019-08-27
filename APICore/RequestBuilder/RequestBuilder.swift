@@ -51,10 +51,11 @@ open class RequestBuilder<S: APIServiceType>  {
         
         if let delegate = S.configurator?.delegate {
             
-            func status303(response: Response) -> Single<Response> {
+            func status403(response: Response) -> Single<Response> {
+                guard response.statusCode == 403 else { return .just(response) }
                 return delegate.tryRestoreAccessWhen403(response: response).flatMap { req() }
             }
-            return req().flatMap(status303)
+            return req().flatMap(status403)
         } else {
             return req()
         }
