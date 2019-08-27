@@ -15,10 +15,14 @@ public protocol APIServiceConfiguratorType: class {
     var sessionManager: SessionManager { get }
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
-    var authTokenProvider: AuthTokenProvider? { get set }
     var requestsErrorBehavior: RequestErrorBehavior? { get }
-    var whenErrorReturnSingle: ((Error) throws -> Single<Void>)? { get set}
+    var delegate: APIServiceConfiguratorDelegate? { get set } 
 }
 
 
-
+public protocol APIServiceConfiguratorDelegate:  class {
+    
+    var token: AuthToken? { get set }
+    
+    func onErrorTryOnce(error: Error) throws -> Single<Void>
+}

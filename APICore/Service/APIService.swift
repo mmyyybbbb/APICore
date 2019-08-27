@@ -32,7 +32,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
         if case AuthStrategy.authorizationHeader = self.authStrategy,
             configurator.plugins.contains(where: { $0 is AccessTokenPlugin}) == false {
             let accessPlugin = AccessTokenPlugin(tokenClosure: { [weak configurator] in
-                return configurator?.authTokenProvider?.token ?? ""
+                return configurator?.delegate?.token ?? ""
             })
             plugins.append(accessPlugin)
         }
@@ -53,7 +53,7 @@ public extension  APIService {
         guard let serviceConfigurator = APIService<TMethod, TConfigurator>.configurator else {
             return false
         }
-        return serviceConfigurator.authTokenProvider?.token != nil
+        return serviceConfigurator.delegate?.token != nil
     }
     
     func setMock(for key: Method.MockKey, value: String) {
@@ -109,7 +109,7 @@ fileprivate extension APIService {
         print("url: \(authStrategy)")
         
         if case let AuthStrategy.addTokenToUrl(urlParamName: authUrlTokenKey) = authStrategy,
-           let token = configuratorStrong.authTokenProvider?.token {
+           let token = configuratorStrong.delegate?.token {
             methodParams.url(authUrlTokenKey, token)
         }
         
@@ -158,7 +158,7 @@ fileprivate extension APIService {
         
         print("header: \(authStrategy)")
         if case let AuthStrategy.addTokenToHeader(headerName: headerTokenKey) = authStrategy,
-            let token = configuratorStrong.authTokenProvider?.token {
+            let token = configuratorStrong.delegate?.token {
             fullHeaders[headerTokenKey] = token 
         }
         

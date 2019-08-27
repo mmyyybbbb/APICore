@@ -49,9 +49,10 @@ open class RequestBuilder<S: APIServiceType>  {
                 .do(onError: notifyAboutError)
         }
         
-        if let catchError = S.configurator?.whenErrorReturnSingle {
+        if let delegate = S.configurator?.delegate {
+            
             func onCatch(error: Error) throws -> Single<Response> {
-                return try catchError(error).flatMap { req() }
+                return try delegate.onErrorTryOnce(error: error).flatMap { req() }
             }
             return req().catchError(onCatch)
         } else {

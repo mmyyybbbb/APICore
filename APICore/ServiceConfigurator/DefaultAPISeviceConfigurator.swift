@@ -7,16 +7,14 @@
 //
 import RxSwift
 
-open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenProvider {
-    public var whenErrorReturnSingle: ((Error) throws -> Single<Void>)?
+open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
+    public var delegate: APIServiceConfiguratorDelegate? = nil
     public var sessionManager: SessionManager
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
     public var plugins: [Plugin] = []
     public var baseHeaders: [String: String]?
     public var requestsErrorBehavior: RequestErrorBehavior?
-    public weak var authTokenProvider: AuthTokenProvider? = nil
-    public private(set) var token: AuthToken?
     
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl
@@ -39,11 +37,6 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType, AuthTokenP
         self.plugins = plugins
         self.baseHeaders = headers
         self.requestsErrorBehavior = requestsErrorBehavior
-    }
-    
-    public func setTokenProviderToSelf(with token: AuthToken) {
-        authTokenProvider = self
-        self.token = token
     }
 }
 
