@@ -20,9 +20,16 @@ public protocol APIServiceConfiguratorType: class {
 }
 
 
-public protocol APIServiceConfiguratorDelegate:  class {
+public protocol APIServiceConfiguratorDelegate: class {
     
     var token: AuthToken? { get set }
     
     func onErrorTryOnce(error: Error) throws -> Single<Void>
+}
+
+public extension APIServiceConfiguratorDelegate{
+    
+    func onErrorTryOnce(error: Error) throws -> Single<Void> {
+        throw error
+    }
 }
