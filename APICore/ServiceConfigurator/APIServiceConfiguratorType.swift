@@ -24,12 +24,12 @@ public protocol APIServiceConfiguratorDelegate: class {
     
     var token: AuthToken? { get set }
     
-    func onErrorTryOnce(error: Error) throws -> Single<Void>
+    func tryRestoreAccessWhen403(response: Response) -> Single<Void>
 }
 
 public extension APIServiceConfiguratorDelegate{
     
-    func onErrorTryOnce(error: Error) throws -> Single<Void> {
-        throw error
+    func tryRestoreAccessWhen403(response: Response) throws -> Single<Void> {
+        return .just(())
     }
 }
