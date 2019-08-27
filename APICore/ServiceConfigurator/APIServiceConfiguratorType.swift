@@ -29,7 +29,7 @@ public protocol APIServiceConfiguratorDelegate: class {
 
 public extension APIServiceConfiguratorDelegate{
     
-    func tryRestoreAccessWhen403(response: Response) throws -> Single<Void> {
+    func tryRestoreAccessWhen403(response: Response) -> Single<Void> {
         return .just(())
     }
 }
