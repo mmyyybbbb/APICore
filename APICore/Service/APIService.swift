@@ -27,10 +27,20 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
     
     lazy public var provider: MoyaProvider<TMethod> = {
         let configurator = configuratorStrong
+        var plugins = configurator.plugins
+        
+        if case AuthStrategy.authorizationHeader = self.authStrategy,
+            configurator.plugins.contains(where: { $0 is AccessTokenPlugin}) == false {
+            let accessPlugin = AccessTokenPlugin(tokenClosure: { [weak configurator] in
+                return configurator?.delegate?.token ?? ""
+            })
+            plugins.append(accessPlugin)
+        }
+        
         return MoyaProvider<TMethod>(endpointClosure: endpointBuilder,
                                      stubClosure: stubBehaviorBuilder,
                                      manager: configurator.sessionManager,
-                                     plugins: configurator.plugins)
+                                     plugins: plugins)
  
     }()
     
@@ -43,7 +53,7 @@ public extension  APIService {
         guard let serviceConfigurator = APIService<TMethod, TConfigurator>.configurator else {
             return false
         }
-        return serviceConfigurator.authTokenProvider?.token != nil
+        return serviceConfigurator.delegate?.token != nil
     }
     
     func setMock(for key: Method.MockKey, value: String) {
@@ -58,6 +68,14 @@ public extension  APIService {
     
     func removeMock(for key: Method.MockKey) {
         actualMocks.removeValue(forKey: key)
+    }
+    
+    func mockData(for key: Method.MockKey) -> Data? {
+        return actualMocks[key]
+    }
+    
+    func isMocked(_ key: Method.MockKey) -> Bool {
+        return actualMocks.keys.contains(key)
     }
 }
 
@@ -91,7 +109,7 @@ fileprivate extension APIService {
         print("url: \(authStrategy)")
         
         if case let AuthStrategy.addTokenToUrl(urlParamName: authUrlTokenKey) = authStrategy,
-           let token = configuratorStrong.authTokenProvider?.token {
+           let token = configuratorStrong.delegate?.token {
             methodParams.url(authUrlTokenKey, token)
         }
         
@@ -104,7 +122,7 @@ fileprivate extension APIService {
         }
         
         if methodParams.bodyParams.isEmpty {
-            return .requestParameters(parameters: methodParams.urlParams, encoding: getBodyEncoding(method))
+            return .requestParameters(parameters: methodParams.urlParams, encoding: URLEncoding.queryString)
         }
         
         return .requestCompositeParameters(bodyParameters: methodParams.bodyParams,
@@ -140,7 +158,7 @@ fileprivate extension APIService {
         
         print("header: \(authStrategy)")
         if case let AuthStrategy.addTokenToHeader(headerName: headerTokenKey) = authStrategy,
-            let token = configuratorStrong.authTokenProvider?.token {
+            let token = configuratorStrong.delegate?.token {
             fullHeaders[headerTokenKey] = token 
         }
         
@@ -164,10 +182,28 @@ fileprivate extension APIService {
     
     
     private func buildFullUrl(_ method: Method) -> URL {
-        let fullUrl = configuratorStrong.baseUrl
+        
+        // Когда путь метода начинается с "/", то относительный путь в базовом урл игнорируется
+        //
+        // Например:
+        // - базовой урл: "https://my.broker.ru/services"
+        // - путь метода: "/services/api/v1/accounts/iia/agreements/9ddc90c0-bed6-4bae-a87b-8a285ab7c6c9/status"
+        // - конечный урл: "https://my.broker.ru/services/api/v1/accounts/iia/agreements/9ddc90c0-bed6-4bae-a87b-8a285ab7c6c9/status"
+        //
+        // то есть, не будет повторяться 2 раза /services/serivces
+        //
+        if method.methodPath.path.starts(with: "/") {
+            let baseUrl = configuratorStrong.baseUrl
+            let relativePath = configuratorStrong.baseUrl.relativePath
+            let host = baseUrl.absoluteString.replacingOccurrences(of: relativePath, with: "")
+            
+            if let baseUrl = URL(string: host) {
+                return baseUrl.appendingPathComponent(method.methodPath.path)
+            }
+        }
+        
+        return configuratorStrong.baseUrl
             .appendingPathComponent(urlServicePathComponent)
             .appendingPathComponent(method.methodPath.path)
-        
-        return fullUrl
     }
 }

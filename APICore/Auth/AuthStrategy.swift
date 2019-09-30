@@ -10,4 +10,5 @@ public enum AuthStrategy {
     case withoutAuth
     case addTokenToHeader(headerName: String)
     case addTokenToUrl(urlParamName: String)
+    case authorizationHeader
 }

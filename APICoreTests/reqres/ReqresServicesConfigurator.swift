@@ -9,6 +9,7 @@
 import APICore
 
 final class ReqresServicesConfigurator: APIServiceConfiguratorType {
+    var baseHeaders: [String : String]? = nil
     var sessionManager: SessionManager = SessionManager.instance
     var bodyEncoding: MethodBodyEncoding = { _ in JSONEncoding.default}
     var baseUrl: URL = URL(string: "https://reqres.in")!

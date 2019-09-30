@@ -1,15 +1,43 @@
-platform :ios, '10.0'
+platform :ios, '9.0'
 use_frameworks!
 inhibit_all_warnings!
 
+source 'https://gitlab.com/BCSBroker/iOS/brokerrepo.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+def pods
+  pod 'Moya', '~> 13.0.1'
+  pod 'Moya/RxSwift', '~> 13.0.1'
+end
+
 target :APICore do
-  pod 'Moya/RxSwift'
-  pod 'Moya'
+  pods
   
   target :APICoreTests do
     inherit! :search_paths
-    pod 'Moya/RxSwift'
-    pod 'RxBlocking'
-    pod 'Moya'
+    pods
+    pod 'RxBlocking', '~> 4.5'
   end
 end
+
+
+post_install do |installer|
+  
+  installer.pods_project.targets.each do |target|
+    
+    if ['Alamofire', 'Moya', 'Result', 'RxBlocking', 'RxSwift'].include? target.name
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '5.0'
+      end
+    end
+    
+    target.build_configurations.each do |config|
+      if config.name == 'Debug'
+        config.build_settings['OTHER_SWIFT_FLAGS'] = ['$(inherited)', '-Onone']
+        config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Owholemodule'
+      end
+    end
+  end
+  
+end
+

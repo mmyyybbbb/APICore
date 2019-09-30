@@ -7,6 +7,7 @@
 //
 
 import Moya
+import RxSwift
 
 public protocol APIServiceConfiguratorType: class {
     var baseUrl: URL { get }
@@ -14,14 +15,21 @@ public protocol APIServiceConfiguratorType: class {
     var sessionManager: SessionManager { get }
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
-    var authTokenProvider: AuthTokenProvider? { get }
-}
-
-extension APIServiceConfiguratorType {
-    public var authTokenProvider: AuthTokenProvider? { return nil } 
-    public var baseHeaders: [String: String]? { return nil }
-    public var plugins: [Plugin] { return [] } 
+    var requestsErrorBehavior: RequestErrorBehavior? { get }
+    var delegate: APIServiceConfiguratorDelegate? { get set } 
 }
 
 
+public protocol APIServiceConfiguratorDelegate: class {
+    
+    var token: AuthToken? { get set }
+    
+    func tryRestoreAccessWhen403(response: Response) -> Single<Void>
+}
 
+public extension APIServiceConfiguratorDelegate{
+    
+    func tryRestoreAccessWhen403(response: Response) -> Single<Void> {
+        return .just(())
+    }
+}

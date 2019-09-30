@@ -6,8 +6,8 @@
 //  Copyright © 2019 BCS. All rights reserved.
 //
 
-extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
-    public mutating func addIfNotEmty(key: Key, value: String?) {
+public extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
+    mutating func addIfNotEmty(key: Key, value: String?) {
         guard let value = value, value.isEmpty == false else {
             return
         }
