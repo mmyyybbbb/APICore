@@ -183,6 +183,12 @@ fileprivate extension APIService {
     
     private func buildFullUrl(_ method: Method) -> URL {
         
+        if method.baseURL.absoluteString != "" {
+            return method.baseURL
+                .appendingPathComponent(urlServicePathComponent)
+                .appendingPathComponent(method.methodPath.path)
+        }
+        
         // Когда путь метода начинается с "/", то относительный путь в базовом урл игнорируется
         //
         // Например:
