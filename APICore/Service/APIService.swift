@@ -183,8 +183,8 @@ fileprivate extension APIService {
     
     private func buildFullUrl(_ method: Method) -> URL {
         
-        if method.baseURL.absoluteString != "" {
-            return method.baseURL
+        if let baseURL = method.overrideBaseURL {
+            return baseURL
                 .appendingPathComponent(urlServicePathComponent)
                 .appendingPathComponent(method.methodPath.path)
         }
