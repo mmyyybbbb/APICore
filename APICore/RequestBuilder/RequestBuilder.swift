@@ -49,10 +49,10 @@ open class RequestBuilder<S: APIServiceType>  {
                 .do(onError: notifyAboutError)
         }
         
-        if let delegate = S.configurator?.delegate, let funcIsUnauthorized = S.configurator?.isUnauthorized {
+        if let delegate = S.configurator?.delegate, let configurator = S.configurator {
             
             func statusUnauthorized(response: Response) -> Single<Response> {
-                guard funcIsUnauthorized(response) else { return .just(response) }
+                guard configurator.isUnauthorized(response: response) else { return .just(response) }
                 return delegate.tryRestoreAccess(response: response).flatMap { req() }
             }
             return req().flatMap(statusUnauthorized)
