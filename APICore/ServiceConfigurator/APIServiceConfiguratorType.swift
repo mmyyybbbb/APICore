@@ -16,20 +16,21 @@ public protocol APIServiceConfiguratorType: class {
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
     var requestsErrorBehavior: RequestErrorBehavior? { get }
-    var delegate: APIServiceConfiguratorDelegate? { get set } 
+    var delegate: APIServiceConfiguratorDelegate? { get set }
+    
+    func isUnauthorized(response: Response) -> Bool
 }
 
+public extension APIServiceConfiguratorType {
+    func isUnauthorized(response: Response) -> Bool { return false }
+}
 
 public protocol APIServiceConfiguratorDelegate: class {
-    
     var token: AuthToken? { get set }
-    
-    func tryRestoreAccessWhen403(response: Response) -> Single<Void>
+
+    func tryRestoreAccess(response: Response) -> Single<Void>
 }
 
-public extension APIServiceConfiguratorDelegate{
-    
-    func tryRestoreAccessWhen403(response: Response) -> Single<Void> {
-        return .just(())
-    }
+public extension APIServiceConfiguratorDelegate {
+    func tryRestoreAccess(response: Response) -> Single<Void> { return .just(()) }
 }
