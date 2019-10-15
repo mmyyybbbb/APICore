@@ -21,10 +21,6 @@ public protocol APIServiceConfiguratorType: class {
     func isUnauthorized(response: Response) -> Bool
 }
 
-public extension APIServiceConfiguratorType {
-    func isUnauthorized(response: Response) -> Bool { return false }
-}
-
 public protocol APIServiceConfiguratorDelegate: class {
     var token: AuthToken? { get set }
 
