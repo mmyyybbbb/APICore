@@ -5,6 +5,7 @@
 //  Created by alexej_ne on 29/01/2019.
 //  Copyright © 2019 BCS. All rights reserved.
 //
+import Moya
 import RxSwift
 
 open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
@@ -37,6 +38,10 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
         self.plugins = plugins
         self.baseHeaders = headers
         self.requestsErrorBehavior = requestsErrorBehavior
+    }
+    
+    open func isUnauthorized(response: Response) -> Bool {
+        return false
     }
 }
 

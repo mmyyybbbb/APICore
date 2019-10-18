@@ -49,13 +49,13 @@ open class RequestBuilder<S: APIServiceType>  {
                 .do(onError: notifyAboutError)
         }
         
-        if let delegate = S.configurator?.delegate {
+        if let delegate = S.configurator?.delegate, let configurator = S.configurator {
             
-            func status403(response: Response) -> Single<Response> {
-                guard response.statusCode == 403 else { return .just(response) }
-                return delegate.tryRestoreAccessWhen403(response: response).flatMap { req() }
+            func statusUnauthorized(response: Response) -> Single<Response> {
+                guard configurator.isUnauthorized(response: response) else { return .just(response) }
+                return delegate.tryRestoreAccess(response: response).flatMap { req() }
             }
-            return req().flatMap(status403)
+            return req().flatMap(statusUnauthorized)
         } else {
             return req()
         }
