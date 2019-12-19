@@ -6,8 +6,8 @@ source 'https://gitlab.com/BCSBroker/iOS/brokerrepo.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
 def pods
-  pod 'Moya', '~> 13.0.1'
-  pod 'Moya/RxSwift', '~> 13.0.1'
+  pod 'RxSwift', '~> 5.0.1'
+  pod 'Moya', '~> 13.0.0'
 end
 
 target :APICore do
@@ -16,7 +16,7 @@ target :APICore do
   target :APICoreTests do
     inherit! :search_paths
     pods
-    pod 'RxBlocking', '~> 4.5'
+    pod 'RxBlocking'
   end
 end
 
