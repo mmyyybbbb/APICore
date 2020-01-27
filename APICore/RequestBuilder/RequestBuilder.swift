@@ -74,7 +74,7 @@ open class RequestBuilder<S: APIServiceType>  {
                                                                       maxRepeatCount: maxRepeatCount-1,
                                                                       repeatAfter: repeatAfter)
             return request(forceErrorBehavior:  behavior)
-                .delaySubscription(repeatAfter, scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated)) 
+                .delaySubscription(repeatAfter, scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             
         case let .autoRepeat(maxRepeatCount, repeatAfter):
             guard maxRepeatCount > 0  else { break }

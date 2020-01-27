@@ -13,7 +13,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
     public typealias Configurator = TConfigurator
     private var actualMocks: [Method.MockKey: Data] = [:]
     open var allServiceBodyEncoding: MethodBodyEncoding?
-    open var useMocksIfSetted: Bool = true
+    open var useMocksIfSetted: Bool = false
     open var urlServicePathComponent: String { return "" }
     open var serviceHeaders:[String: String]? { return nil }
     open var authStrategy: AuthStrategy { return .withoutAuth }
@@ -81,7 +81,7 @@ public extension  APIService {
 
 //MARK: Public+
 public extension APIService where TMethod.MockKey: MockSampleData {
-    public func setMockFromSample(for key: Method.MockKey) {
+    func setMockFromSample(for key: Method.MockKey) {
         guard let sample = key.sampleData else { return }
         setMock(for: key, value: sample)
     }

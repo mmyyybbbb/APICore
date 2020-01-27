@@ -8,6 +8,6 @@
 import RxSwift
 
 public enum RequestErrorBehavior {
-    case autoRepeatWhen(nsUrlErrorDomainCodeIn: [Int], maxRepeatCount: Int, repeatAfter: TimeInterval)
-    case autoRepeat(maxRepeatCount: Int, repeatAfter: TimeInterval) 
+    case autoRepeatWhen(nsUrlErrorDomainCodeIn: [Int], maxRepeatCount: Int, repeatAfter: DispatchTimeInterval)
+    case autoRepeat(maxRepeatCount: Int, repeatAfter: DispatchTimeInterval) 
 }

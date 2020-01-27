@@ -9,7 +9,7 @@
 import Alamofire
 
 public extension String {
-    public func asUrlWithSharpEncoding(parameters: [String: Any]? = nil) -> URL {
+    func asUrlWithSharpEncoding(parameters: [String: Any]? = nil) -> URL {
         let tempURLRequest = URLRequest(url: URL(string: self)!)
         let r = try! URLEncoding.queryString.encode(tempURLRequest, with: parameters)
         let s = r.url!.absoluteString

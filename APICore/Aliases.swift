@@ -20,7 +20,7 @@ public typealias Plugin = PluginType
 public typealias AuthToken = String 
 
 public extension SessionManager {
-    public static var instance: SessionManager {
+    static var instance: SessionManager {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         let sessionManager = SessionManager(configuration: configuration)
