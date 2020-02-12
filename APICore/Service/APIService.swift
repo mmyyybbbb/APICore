@@ -114,11 +114,12 @@ fileprivate extension APIService {
         }
         
         if let multipartData = method.multipart {
-            let formData = MultipartFormData(provider: .data(multipartData.data),
-                                             name: "file",
-                                             fileName: "file.jpg",
-                                             mimeType: multipartData.mimeType)
-            return .uploadCompositeMultipart([formData], urlParameters: methodParams.urlParams)
+            let formData = multipartData.map { MultipartFormData(provider: .data($0.data),
+                                                                 name: $0.name,
+                                                                 fileName: "file.jpg",
+                                                                 mimeType: $0.mimeType) }
+                
+            return .uploadCompositeMultipart(formData, urlParameters: methodParams.urlParams)
         }
         
         if methodParams.bodyParams.isEmpty {
