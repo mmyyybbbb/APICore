@@ -18,14 +18,6 @@ public enum BinaryData {
         }
     }
     
-    public var fileName: String? {
-        switch self {
-        case .jpeg: return "file.jpg"
-        case .customName: return "file.jpg"
-        default: return nil
-        }
-    }
-    
     public var mimeType: String? {
         switch self {
         case .jpeg: return "image/jpeg"
