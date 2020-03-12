@@ -8,6 +8,7 @@
 
 import Alamofire
 import RxSwift
+import Moya
 
 public typealias APICoreManager = APICoreObjectContainer
 public typealias InternetConnectionStatus = NetworkReachabilityManager.NetworkReachabilityStatus
@@ -53,7 +54,11 @@ public final class APICoreObjectContainer {
     public lazy var requestHttpErrors: Observable<Error> = {
            return requestHttpErrorsPublisher.share().asObservable()
     }()
+
+    //MARK: Unauthorized
+    let requestUnauthorizedPublisher = PublishSubject<Moya.Response>()
     
+    public lazy var requestUnauthorized: Observable<Moya.Response> = { requestUnauthorizedPublisher.share().asObservable() }()
     
     //MARK: Container for objects
     private var configurators: [APIServiceConfiguratorType] = []

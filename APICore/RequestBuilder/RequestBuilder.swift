@@ -44,18 +44,26 @@ open class RequestBuilder<S: APIServiceType>  {
         let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext(extractNSError(from: $0)) }
         
         func req() -> Single<Response> {
-            return S.shared.provider.rx
+            S.shared.provider.rx
                 .request(method, callbackQueue: DispatchQueue.global())
                 .do(onError: notifyAboutError)
         }
         
         if let delegate = S.configurator?.delegate, let configurator = S.configurator {
             
-            func statusUnauthorized(response: Response) -> Single<Response> {
+            func tryRestoreAccess(response: Response) -> Single<Response> {
                 guard configurator.isUnauthorized(response: response) else { return .just(response) }
                 return delegate.tryRestoreAccess(response: response).flatMap { req() }
             }
-            return req().flatMap(statusUnauthorized)
+            
+            func notifyUnauthorized(response: Response) -> Response {
+                if configurator.isUnauthorized(response: response) {
+                    APICoreManager.shared.requestUnauthorizedPublisher.onNext(response)
+                }
+                return response
+            }
+            
+            return req().flatMap(tryRestoreAccess).map(notifyUnauthorized)
         } else {
             return req()
         }
