@@ -18,6 +18,7 @@ public protocol APIServiceConfiguratorType: class {
     var requestsErrorBehavior: RequestErrorBehavior? { get }
     var delegate: APIServiceConfiguratorDelegate? { get set }
     
+    var isNeedTryRestoreAccess: Bool { get }
     func isUnauthorized(response: Response) -> Bool
 }
 

@@ -40,9 +40,8 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
         self.requestsErrorBehavior = requestsErrorBehavior
     }
     
-    open func isUnauthorized(response: Response) -> Bool {
-        return false
-    }
+    open var isNeedTryRestoreAccess: Bool { true }
+    open func isUnauthorized(response: Response) -> Bool { false }
 }
 
 
