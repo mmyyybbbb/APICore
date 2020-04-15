@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'APICore'
-  s.version          = '3.0.5'
+  s.version          = '3.1.0'
   s.summary          = 'Модуль APICore'
   s.homepage         = 'https://github.com/BCS-Broker/APICore'
   s.author           = 'BCS-Broker'
@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.module_name  = 'APICore'  
   s.source_files  = 'APICore/**/*.swift'
   s.dependency 'Moya', '~> 13.0.0'
-  s.dependency 'RxSwift', '~> 5.0.1'
+  s.dependency 'RxSwift', '~> 5.1.0'
 end
