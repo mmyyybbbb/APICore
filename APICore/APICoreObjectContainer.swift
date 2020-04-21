@@ -61,7 +61,7 @@ public final class APICoreObjectContainer {
     public lazy var requestUnauthorized: Observable<Moya.Response> = { requestUnauthorizedPublisher.share().asObservable() }()
     
     //MARK: Container for objects
-    private var configurators: [APIServiceConfiguratorType] = []
+    public private(set) var configurators: [APIServiceConfiguratorType] = []
     private var serviceConfigurators: [String : APIServiceConfiguratorType] = [:]
     private var services: [String: Any] = [:]
     private let networkReachabilityManager = NetworkReachabilityManager()
