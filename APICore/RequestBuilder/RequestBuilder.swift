@@ -120,9 +120,9 @@ public extension Single where Element == Response {
                 do {
                     return try decoder.decode(T.self, from: response.data)
                 } catch {
-                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
-                    throw error
+                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
+                    throw decodeErr
                 }
         }
         .asSingle()
@@ -139,9 +139,9 @@ public extension Single where Element == Response {
                 do {
                     return try decoder.decode(T.self, from: response.data)
                 } catch {
-                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
-                    throw error
+                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
+                    throw decodeErr
                 }
             }
             .asSingle()
@@ -167,9 +167,9 @@ public extension Single where Element == Response {
                     let redirect = try MethodRedirect(response.response)
                     return (data: data, redirect: redirect)
                 } catch {
-                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
-                    throw error
+                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
+                    throw decodeErr
                 }
         }
         .asSingle()
@@ -187,9 +187,9 @@ public extension Single where Element == Response {
                     let redirect = try? MethodRedirect(response.response)
                     return (data: data, redirect: redirect)
                 } catch {
-                    let decodErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodErr)
-                    throw error
+                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
+                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
+                    throw decodeErr
                 }
         }
         .asSingle().observeOn(scheduler)
