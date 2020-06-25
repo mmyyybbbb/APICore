@@ -12,6 +12,7 @@ import Moya
 
 public typealias APICoreManager = APICoreObjectContainer
 public typealias InternetConnectionStatus = NetworkReachabilityManager.NetworkReachabilityStatus
+
 public final class APICoreObjectContainer {
  
     //MARK: Instance
@@ -61,15 +62,16 @@ public final class APICoreObjectContainer {
     public lazy var requestUnauthorized: Observable<Moya.Response> = { requestUnauthorizedPublisher.share().asObservable() }()
     
     //MARK: Container for objects
-    public private(set) var configurators: [APIServiceConfiguratorType] = []
-    private var serviceConfigurators: [String : APIServiceConfiguratorType] = [:]
-    private var services: [String: Any] = [:]
+    private var configurators: ThreadSafeArray<APIServiceConfiguratorType> = .init([])
+    private var serviceConfigurators: ThreadSafeDictionary<String, APIServiceConfiguratorType> = .init([:])
+    private var services: ThreadSafeDictionary<String, Any> = .init([:])
     private let networkReachabilityManager = NetworkReachabilityManager()
-    
+
+    public var apiServiceConfigurators: [APIServiceConfiguratorType] { configurators.map { $0 } }
     
     //MARK: Public
     public func register(_ configurator: APIServiceConfiguratorType) {
-       configurators.append(configurator)
+        configurators.append(configurator)
     }
     
     public func register<S: APIServiceType>(configurator: APIServiceConfiguratorType, for service: S.Type) {
