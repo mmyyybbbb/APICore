@@ -10,7 +10,7 @@ import RxSwift
 
 open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
     public var delegate: APIServiceConfiguratorDelegate? = nil
-    public var sessionManager: SessionManager
+    public var session: APICoreSession = .shared
     public var bodyEncoding: MethodBodyEncoding
     public var baseUrl: URL
     public var plugins: [Plugin] = []
@@ -19,21 +19,19 @@ open class DefaultAPIServiceConfigurator: APIServiceConfiguratorType {
     
     public init(baseUrl: URL) {
         self.baseUrl = baseUrl
-        sessionManager = SessionManager.instance
-        
         let defaultBodyEncoding: MethodBodyEncoding = { $0 == .get ? URLEncoding.default : JSONEncoding.default }
         bodyEncoding = defaultBodyEncoding
     }
     
     public init(baseUrl: URL,
-                sessionManager: SessionManager = SessionManager.instance,
+                session: Session = Session.shared,
                 bodyEncoding: @escaping MethodBodyEncoding = { $0 == .get ? URLEncoding.default : JSONEncoding.default },
                 plugins: [Plugin] = [],
                 headers:  [String: String]?  = nil,
                 requestsErrorBehavior: RequestErrorBehavior? = nil) {
         
         self.baseUrl = baseUrl
-        self.sessionManager = sessionManager
+        self.session = session
         self.bodyEncoding = bodyEncoding
         self.plugins = plugins
         self.baseHeaders = headers

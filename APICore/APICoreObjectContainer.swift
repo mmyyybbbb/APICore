@@ -40,8 +40,8 @@ public final class APICoreObjectContainer {
     //MARK: Internet connection
     private lazy var internetConnectionPublisher: PublishSubject<InternetConnectionStatus> = {
         let publisher = PublishSubject<InternetConnectionStatus>()
-        networkReachabilityManager?.listener = { status in publisher.onNext(status) }
-        networkReachabilityManager?.startListening()
+        networkReachabilityManager?.startListening(onUpdatePerforming: { status in publisher.onNext(status)
+        })
         return publisher
     }()
     

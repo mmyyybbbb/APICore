@@ -9,5 +9,6 @@
 import Moya
 
 public extension PluginType {
-    static var logger: PluginType { return Plugins.logger() }
+    static var logger: PluginType { return Plugins.logger }
+    static var tracer: PluginType { return Plugins.tracer }
 }

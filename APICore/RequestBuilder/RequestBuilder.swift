@@ -6,6 +6,7 @@
 //  Copyright © 2019 BCS. All rights reserved.
 //
 import Moya
+import Alamofire
 import RxSwift
 import Foundation
 
@@ -41,7 +42,7 @@ open class RequestBuilder<S: APIServiceType>  {
     
     private func _request() -> Single<Response> {
         
-        let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext(extractNSError(from: $0)) }
+        let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext($0.asNSError) }
         
         func req() -> Single<Response> {
             S.shared.provider.rx
@@ -67,11 +68,10 @@ open class RequestBuilder<S: APIServiceType>  {
         } else {
             return req()
         }
-        
     }
     
     private func  onCatchError(behavior: RequestErrorBehavior, error: Error) throws  -> Single<Response> {
-        let nsError = extractNSError(from: error)
+        let nsError = error.asNSError
         
         guard nsError.domain == NSURLErrorDomain else { throw error }
         
@@ -94,21 +94,37 @@ open class RequestBuilder<S: APIServiceType>  {
         throw error
     }
 }
-
-fileprivate func extractNSError(from error: Error) -> NSError {
-    if case MoyaError.underlying(let err, _) = error  {
-        return err as NSError
+ 
+public extension Error {
+    var asNSError: NSError {
+        let error: Error = self
+        if case MoyaError.underlying(let err, _) = error  {
+            return err as NSError
+        }
+        return error as NSError
     }
-    return error as NSError
+    
+    func `is`(domain: String, code: Int) -> Bool {
+        let err = asNSError
+        return err.domain == domain && err.code == code
+    }
+    
+    var isNotConnectedToInternetError: Bool {
+        if self.is(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet) { return true }
+        if let afError = self as? AFError {
+            debugPrint(afError)
+        }
+        return false
+    }
 }
-
+ 
 /// Ошибка парсинга данных
-public struct DecodeError: Error {
+public struct DecodeError: ApiCoreError {
     public let error: Error
-    public let response: Response
+    public let response: Response?
     public let targetTypeDescription: Any
 }
-
+ 
 public extension Single where Element == Response {
     
     func mapTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance,
@@ -204,4 +220,44 @@ public extension Single where Element == Response {
     }
 }
 
+public extension Response {
+    /// уникальный id запроса добавляется как header к запросу плагином Tracer
+    var traceId: String? { request?.allHTTPHeaderFields?[Tracer.Key.traceId] }
+}
 
+/// Ошибка взаимодействия с внешним API
+public protocol ApiCoreError: Error {
+    /// уникальный id запроса добавляется как header к запросу плагином Tracer
+    var traceId: String? { get }
+    var response: Response? { get }
+}
+
+public extension ApiCoreError {
+    /// уникальный id запроса добавляется как header к запросу плагином Tracer
+    var traceId: String? { response?.traceId }
+    
+    var responseHeaders: [AnyHashable: Any]? { response?.response?.allHeaderFields }
+    
+    var url: URL? { response?.response?.url }
+    
+    var debugText: String {
+        var result = self.localizedDescription
+        if let url = url {
+            result += "\nurl: \(url.absoluteString)"
+        }
+        if let traceId = traceId {
+            result += "\ntraceId: \(traceId)"
+        }
+        
+        if let headers = responseHeaders {
+            for h in headers {
+                result += "\n[\(h.key)]: \(h.value)"
+            }
+        }
+        return result
+    }
+}
+
+extension MoyaError: ApiCoreError {
+    
+}

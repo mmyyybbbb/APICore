@@ -12,7 +12,7 @@ import RxSwift
 public protocol APIServiceConfiguratorType: class {
     var baseUrl: URL { get }
     var baseHeaders: [String: String]? { get }
-    var sessionManager: SessionManager { get }
+    var session: Session { get }
     var plugins: [Plugin] { get }
     var bodyEncoding: MethodBodyEncoding { get }
     var requestsErrorBehavior: RequestErrorBehavior? { get }

@@ -9,7 +9,7 @@
 import Moya
 import Alamofire
 
-public typealias SessionManager = Alamofire.SessionManager
+public typealias APICoreSession = Alamofire.Session
 public typealias BodyEncoding = ParameterEncoding
 public typealias MethodBodyEncoding = (APIHTTPMethod) -> BodyEncoding
 public typealias APIHTTPMethod = HTTPMethod
@@ -19,12 +19,6 @@ public typealias JSONEncoding = Alamofire.JSONEncoding
 public typealias Plugin = PluginType
 public typealias AuthToken = String 
 
-public extension SessionManager {
-    static var instance: SessionManager {
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-        let sessionManager = SessionManager(configuration: configuration)
-        sessionManager.startRequestsImmediately = false
-        return sessionManager
-    }
+public extension Session {
+    static var shared: Session = .default
 }

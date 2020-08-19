@@ -31,7 +31,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
         
         if case AuthStrategy.authorizationHeader = self.authStrategy,
             configurator.plugins.contains(where: { $0 is AccessTokenPlugin}) == false {
-            let accessPlugin = AccessTokenPlugin(tokenClosure: { [weak configurator] in
+            let accessPlugin = AccessTokenPlugin(tokenClosure: {  [weak configurator] _ in
                 return configurator?.delegate?.token ?? ""
             })
             plugins.append(accessPlugin)
@@ -39,7 +39,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
         
         return MoyaProvider<TMethod>(endpointClosure: endpointBuilder,
                                      stubClosure: stubBehaviorBuilder,
-                                     manager: configurator.sessionManager,
+                                     session: configurator.session,
                                      plugins: plugins)
  
     }()

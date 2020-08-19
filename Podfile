@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '10.0'
 use_frameworks!
 inhibit_all_warnings!
 
@@ -7,7 +7,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 def pods
   pod 'RxSwift', '~> 5.1.0'
-  pod 'Moya', '~> 13.0.0'
+  pod 'Moya', '~> 14.0.0'
 end
 
 target :APICore do
@@ -27,7 +27,7 @@ post_install do |installer|
     
     if ['Alamofire', 'Moya', 'Result', 'RxBlocking', 'RxSwift'].include? target.name
       target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '5.0'
+        config.build_settings['SWIFT_VERSION'] = '5.1'
       end
     end
     
