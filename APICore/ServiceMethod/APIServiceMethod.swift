@@ -17,6 +17,7 @@ public protocol APIServiceMethod: TargetType {
     var mockKey: MockKey? { get }
     var multipart: [BinaryData]? { get }
     var overrideBodyEncoding: BodyEncoding? { get }
+    var overrideQueryEncoding: ParameterEncoding { get }
     var overrideBaseURL: URL? { get }
 }
 
@@ -30,6 +31,7 @@ public extension APIServiceMethod {
     var mockKey: MockKey? { return nil }
     var multipart: [BinaryData]?  { return nil }
     var overrideBodyEncoding: BodyEncoding? { return nil }
+    var overrideQueryEncoding: ParameterEncoding { return URLEncoding.queryString }
     var overrideBaseURL: URL? { return nil }
     var task: Task { return .requestPlain }
 }
