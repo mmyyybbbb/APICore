@@ -53,7 +53,7 @@ public final class APICoreObjectContainer {
     let requestHttpErrorsPublisher =  PublishSubject<Error>()
     
     public lazy var requestHttpErrors: Observable<Error> = {
-           return requestHttpErrorsPublisher.share().asObservable()
+        return requestHttpErrorsPublisher.share().asObservable()
     }()
 
     //MARK: Unauthorized

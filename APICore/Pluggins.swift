@@ -35,8 +35,17 @@ public final class Tracer: PluginType {
         }
         return request
     }
-     
 }
+
+public protocol Traceble {
+    var traceId: String { get }
+}
+
+extension URLRequest: Traceble {
+    /// уникальный id запроса добавляется как header к запросу плагином Tracer
+    public var traceId: String { allHTTPHeaderFields?[Tracer.Key.traceId] ?? "" }
+}
+
  
 public extension NetworkLoggerPlugin.Configuration {
     static func apiCore(output: @escaping OutputType = NetworkLoggerPlugin.Configuration.defaultOutput(target:items:),

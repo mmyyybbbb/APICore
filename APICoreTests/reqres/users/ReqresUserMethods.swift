@@ -14,6 +14,7 @@ enum ReqresUserMethods: APIServiceMethod {
         switch self {
         case .list: return (.get, "users")
         case .single(let id): return (.get, "users/\(id)")
+        case .unexistedResource: return (.get, "asdsda/asdasda/asda")
         }
     }
     
@@ -26,6 +27,7 @@ enum ReqresUserMethods: APIServiceMethod {
     
     case list(page: Int)
     case single(id: Int)
+    case unexistedResource
 }
 
 extension ReqresUserMethods {
@@ -33,12 +35,14 @@ extension ReqresUserMethods {
     enum MockKey: String, MockKeyType {
         case list
         case single
+        case unexistedResource
     }
     
     var mockKey: MockKey? {
         switch self {
         case .list: return .list
         case .single: return .single
+        case .unexistedResource: return .unexistedResource
         }
     }
 }

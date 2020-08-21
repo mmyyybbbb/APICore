@@ -10,6 +10,7 @@
 import XCTest
 import RxSwift
 import RxBlocking
+import Alamofire
 import Moya
 
 class APICoreTests: XCTestCase, AuthTokenProvider {
@@ -18,9 +19,16 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         let config = ReqresServicesConfigurator()
         config.authTokenProvider = self
         APICoreObjectContainer.instanceLazyInit.register(config)
+        bag = DisposeBag()
+        noInternetConnectionExpectation = XCTestExpectation()
+        requestErrorExpectation = XCTestExpectation()
+        requestSuccessExpectation = XCTestExpectation()
     }
     
-    let bag = DisposeBag()
+    var noInternetConnectionExpectation = XCTestExpectation()
+    var requestErrorExpectation = XCTestExpectation()
+    var requestSuccessExpectation = XCTestExpectation()
+    var bag = DisposeBag()
     
     var token: AuthToken? = "token"
     
@@ -39,18 +47,10 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         switch result {
         case .completed: XCTFail("No expected result")
         case let .failed(_, error):
-            
-            guard case MoyaError.underlying(let err, _) = error else  {
-                XCTFail("No expected result")
-                return
-            }
-            
-            XCTAssertEqual((err as NSError).domain, "NSURLErrorDomain", "")
+            XCTAssert(error.asApiCoreError?.isHostNotFound ?? false)
         }
     }
-    
-    let noInternetConnectionExpectation = XCTestExpectation()
-    let requestErrorExpectation = XCTestExpectation()
+
     
     func test_noInternetConnection() {
         let configurator = ReqresServicesConfigurator(baseUrl: "https://google.com")
@@ -62,8 +62,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         
         APICoreManager.shared.requestHttpErrors
             .subscribe(onNext: { error in
-                debugPrint(error.isNotConnectedToInternetError)
-                XCTAssertTrue(error.isNotConnectedToInternetError)
+                XCTAssertTrue(error.asApiCoreError?.isNotInternetConnectionError ?? false)
                 self.requestErrorExpectation.fulfill()
             })
             .disposed(by: bag)
@@ -78,66 +77,93 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         let request = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request(forceErrorBehavior: behavior)
         let result = request.toBlocking().materialize()
         
+        wait(for: [noInternetConnectionExpectation, requestErrorExpectation], timeout: 10)
+        
         switch result {
         case .completed: XCTFail("No expected result")
         case let .failed(_, error: error):
-            debugPrint(error.asNSError.isNotConnectedToInternetError)
-            XCTAssertTrue(error.asNSError.isNotConnectedToInternetError)
+            let apiCoreError = error.asApiCoreError
+            XCTAssertTrue(apiCoreError?.isNotInternetConnectionError ?? false)
         }
         
-        wait(for: [noInternetConnectionExpectation], timeout: 10)
+        
     }
     
-    func test_simpleRequest_decodeError() {
+    func test_request_resource_not_found_error() {
+        
+        APICoreManager.shared.requestHttpErrors
+            .subscribe(onNext: { error in
+                XCTAssert(error.asApiCoreError?.isHTTPResourceNotFounde404 ?? false)
+                self.requestErrorExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        
+        do {
+            let request:Single<User> = RequestBuilder(ReqresUserAPI.self, .unexistedResource)
+                .request()
+                .apiCoreFilterSuccessfulStatusCodes()
+                .mapTo()
+            let _ = try request.toBlocking().first()
+        } catch let error as ApiCoreRequestError {
+            XCTAssert(error.isHTTPResourceNotFounde404)
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
+
+        wait(for: [requestErrorExpectation], timeout: 10)
+    }
+    
+    func test_request_decode_error() {
+        
+        APICoreManager.shared.requestHttpErrors
+            .subscribe(onNext: { error in
+                XCTAssertNotNil(error.asApiCoreDecodingError)
+                self.requestErrorExpectation.fulfill()
+            })
+            .disposed(by: bag)
         
         do {
             let request:Single<User> = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request().mapTo()
-            let result = try request.toBlocking().first()
+            let _ = try request.toBlocking().first()
+        } catch let _ as ApiCoreDecodingError {
+            XCTAssert(true)
         } catch {
-            if let apiError = error as? DecodeError {
-                print("DecodeError: \(apiError)")
-            } else {
-                XCTFail("Catched error: \(error)")
-            }
-            
+            XCTFail("Unexpected error type: \(error)")
         }
+        wait(for: [requestErrorExpectation], timeout: 10)
     }
     
-    func test_listRequest() {
-        
+    func test_metrics() { 
+        AF.request("https://google.com").response { response in
+            debugPrint("duration: \(response.metrics?.taskInterval.duration)")
+            debugPrint(response.metrics)
+            self.requestSuccessExpectation.fulfill()
+        }
+        wait(for: [requestSuccessExpectation], timeout: 10)
+    }
+    
+    func test_request_decode_array() {
         do {
             let request:Single<Root<[User]>> = RequestBuilder(ReqresUserAPI.self, .list(page: 1)).request().mapTo()
             let result = try request.toBlocking().first()
             XCTAssertNotNil(result, "Data model is nil")
         } catch {
-            if let apiError = error as? ApiCoreError {
-                print("ApiCoreError: \(apiError.debugText)")
-                XCTFail("ApiCoreError: \(error) \(apiError.traceId)")
-            } else {
-                XCTFail("Catched error: \(error)")
-            }
-            
+            XCTFail("Catched error: \(error)")
         }
     }
     
-    func test_simpleRequest() {
+    func test_request_decode() {
         
         do {
             let request:Single<Root<User>> = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request().mapTo()
             let result = try request.toBlocking().first()
             XCTAssertNotNil(result, "Data model is nil")
         } catch {
-            if let apiError = error as? ApiCoreError {
-                print("ApiCoreError: \(apiError.debugText)")
-                XCTFail("ApiCoreError: \(error) \(apiError.traceId)")
-            } else {
-                XCTFail("Catched error: \(error)")
-            }
-            
+            XCTFail("Catched error: \(error)")
         }
     }
     
-    func test_mockableRequest() {
+    func test_mock_request() {
         do {
             let response = """
             {
@@ -160,5 +186,23 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         }
     }
     
+    func test_decode_empty_array() {
+        do {
+            let response = """
+            {
+            \"data\" : [1]
+            }
+            """
+            ReqresUserAPI.shared.useMocksIfSetted = true
+            ReqresUserAPI.shared.setMock(for: .list, value: response)
+            
+            let request:Single<Root<[User]>> = RequestBuilder(ReqresUserAPI.self, .list(page: 1)).request().mapTo()
+            let _ = try request.toBlocking().first()
+            XCTFail()
+        } catch {
+            XCTAssertNotNil(error.asApiCoreDecodingError)
+        }
+    }
+ 
 }
 

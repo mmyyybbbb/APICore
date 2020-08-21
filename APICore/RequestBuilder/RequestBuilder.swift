@@ -10,14 +10,16 @@ import Alamofire
 import RxSwift
 import Foundation
 
+public typealias APICoreResponse = Response
+
 open class RequestBuilder<S: APIServiceType>  {
-  
+    
     private let method: S.Method
     
     public init(_ type: S.Type, _ method: S.Method) {
         self.method = method
     }
-  
+    
     public func request() -> Single<Response> {
         
         if let behavior = S.configurator?.requestsErrorBehavior {
@@ -42,11 +44,12 @@ open class RequestBuilder<S: APIServiceType>  {
     
     private func _request() -> Single<Response> {
         
-        let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext($0.asNSError) }
+        let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext($0) }
         
         func req() -> Single<Response> {
             S.shared.provider.rx
                 .request(method, callbackQueue: DispatchQueue.global())
+                .catchError { throw ApiCoreRequestError(error: $0) }
                 .do(onError: notifyAboutError)
         }
         
@@ -79,8 +82,8 @@ open class RequestBuilder<S: APIServiceType>  {
         case let .autoRepeatWhen(nsUrlErrorDomainCodeIn, maxRepeatCount, repeatAfter):
             guard nsUrlErrorDomainCodeIn.contains(nsError.code), maxRepeatCount > 0  else { break }
             let behavior = RequestErrorBehavior.autoRepeatWhen(nsUrlErrorDomainCodeIn: nsUrlErrorDomainCodeIn,
-                                                                      maxRepeatCount: maxRepeatCount-1,
-                                                                      repeatAfter: repeatAfter)
+                                                               maxRepeatCount: maxRepeatCount-1,
+                                                               repeatAfter: repeatAfter)
             return request(forceErrorBehavior:  behavior)
                 .delaySubscription(repeatAfter, scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             
@@ -94,79 +97,46 @@ open class RequestBuilder<S: APIServiceType>  {
         throw error
     }
 }
- 
-public extension Error {
-    var asNSError: NSError {
-        let error: Error = self
-        if case MoyaError.underlying(let err, _) = error  {
-            return err as NSError
+
+func publish(_ error: Error) {
+    APICoreManager.shared.requestHttpErrorsPublisher.onNext(error)
+}
+
+public extension APICoreResponse {
+    /// Метод для парсинга запроса в модель. В случае ошибки парсинга бросает ApiCoreDecodingError, а также отправляет уведомление в APICoreManager.shared.requestHttpErrorsPublisher.onNext
+    func decode<D: Decodable>(_ type: D.Type, atKeyPath keyPath: String? = nil, using decoder: JSONDecoder = JSONDecoder()) throws -> D {
+        do {
+            return try  map(type, atKeyPath: keyPath, using: decoder, failsOnEmptyData: true)
+        } catch {
+            let errorForThrow = ApiCoreDecodingError(error: error, response: self, targetType: D.self) ?? error
+            publish(errorForThrow)
+            throw errorForThrow
         }
-        return error as NSError
-    }
-    
-    func `is`(domain: String, code: Int) -> Bool {
-        let err = asNSError
-        return err.domain == domain && err.code == code
-    }
-    
-    var isNotConnectedToInternetError: Bool {
-        if self.is(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet) { return true }
-        if let afError = self as? AFError {
-            debugPrint(afError)
-        }
-        return false
     }
 }
- 
-/// Ошибка парсинга данных
-public struct DecodeError: ApiCoreError {
-    public let error: Error
-    public let response: Response?
-    public let targetTypeDescription: Any
-}
- 
+
 public extension Single where Element == Response {
+    
     
     func mapTo<T:Decodable>(_ type: T.Type, on scheduler: ImmediateSchedulerType = MainScheduler.instance,
                             with decoder: JSONDecoder = .default) -> Single<T> {
-        
-        return self
-            .asObservable()
-            .map { response in
-                do {
-                    return try decoder.decode(T.self, from: response.data)
-                } catch {
-                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
-                    throw decodeErr
-                }
-        }
-        .asSingle()
+        asObservable()
+            .map { try $0.decode(type, using: decoder)  }
+            .asSingle()
             .observeOn(scheduler)
     }
     
     
     func mapTo<T:Decodable>(on scheduler: ImmediateSchedulerType = MainScheduler.instance,
                             with decoder: JSONDecoder = .default) -> Single<T> {
-        
-        return self
-            .asObservable()
-            .map { response in
-                do {
-                    return try decoder.decode(T.self, from: response.data)
-                } catch {
-                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
-                    throw decodeErr
-                }
-            }
+        asObservable()
+            .map { try $0.decode(T.self, using: decoder)  }
             .asSingle()
             .observeOn(scheduler)
     }
     
     func mapToVoid(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<Void> {
-        return self
-            .asObservable()
+        asObservable()
             .map { response in return Void() }
             .asSingle()
             .observeOn(scheduler)
@@ -179,17 +149,17 @@ public extension Single where Element == Response {
             .asObservable()
             .map { response in
                 do {
-                    let data = try decoder.decode(T.self, from: response.data)
+                    let data = try response.map(type, atKeyPath: nil, using: decoder, failsOnEmptyData: true)
                     let redirect = try MethodRedirect(response.response)
                     return (data: data, redirect: redirect)
                 } catch {
-                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
-                    throw decodeErr
+                    let errorForThrow = ApiCoreDecodingError(error: error, response: response, targetType: T.self) ?? error
+                    publish(errorForThrow)
+                    throw errorForThrow
                 }
         }
         .asSingle()
-            .observeOn(scheduler)
+        .observeOn(scheduler)
     }
     
     func mapWithRedirectIfHasTo<T:Decodable>(_ type: T.Type,
@@ -199,13 +169,13 @@ public extension Single where Element == Response {
             .asObservable()
             .map { response in
                 do {
-                    let data = try decoder.decode(T.self, from: response.data)
+                    let data = try response.map(type, atKeyPath: nil, using: decoder, failsOnEmptyData: true)
                     let redirect = try? MethodRedirect(response.response)
                     return (data: data, redirect: redirect)
                 } catch {
-                    let decodeErr = DecodeError(error: error, response: response, targetTypeDescription: T.self)
-                    APICoreManager.shared.requestHttpErrorsPublisher.onNext(decodeErr)
-                    throw decodeErr
+                    let errorForThrow = ApiCoreDecodingError(error: error, response: response, targetType: T.self) ?? error
+                    publish(errorForThrow)
+                    throw errorForThrow
                 }
         }
         .asSingle().observeOn(scheduler)
@@ -220,44 +190,43 @@ public extension Single where Element == Response {
     }
 }
 
-public extension Response {
-    /// уникальный id запроса добавляется как header к запросу плагином Tracer
-    var traceId: String? { request?.allHTTPHeaderFields?[Tracer.Key.traceId] }
-}
 
-/// Ошибка взаимодействия с внешним API
-public protocol ApiCoreError: Error {
-    /// уникальный id запроса добавляется как header к запросу плагином Tracer
-    var traceId: String? { get }
-    var response: Response? { get }
-}
 
-public extension ApiCoreError {
-    /// уникальный id запроса добавляется как header к запросу плагином Tracer
-    var traceId: String? { response?.traceId }
+public extension PrimitiveSequence where Trait == SingleTrait, Element == APICoreResponse {
     
-    var responseHeaders: [AnyHashable: Any]? { response?.response?.allHeaderFields }
-    
-    var url: URL? { response?.response?.url }
-    
-    var debugText: String {
-        var result = self.localizedDescription
-        if let url = url {
-            result += "\nurl: \(url.absoluteString)"
+    func convertToAPICoreErrorIfCatch() -> PrimitiveSequence<SingleTrait, APICoreResponse> {
+        self.catchError { err in
+            let apiCoreErr = ApiCoreRequestError(error: err)
+            publish(apiCoreErr)
+            throw apiCoreErr
         }
-        if let traceId = traceId {
-            result += "\ntraceId: \(traceId)"
-        }
-        
-        if let headers = responseHeaders {
-            for h in headers {
-                result += "\n[\(h.key)]: \(h.value)"
-            }
-        }
-        return result
     }
-}
-
-extension MoyaError: ApiCoreError {
     
+    
+    /// Filters out responses that don't fall within the given range, generating errors when others are encountered.
+    func apiCoreFilter<R: RangeExpression>(statusCodes: R) -> Single<Element> where R.Bound == Int {
+        map { try $0.filter(statusCodes: statusCodes)}
+            .convertToAPICoreErrorIfCatch()
+    }
+    
+    /// Filters out responses that has the specified `statusCode`.
+    func apiCoreFilter(statusCode: Int) -> Single<Element> {
+        map { try $0.filter(statusCode: statusCode)}
+            .convertToAPICoreErrorIfCatch()
+    }
+    
+    
+    /// Filters out responses where `statusCode` falls within the range 200 - 299.
+    func apiCoreFilterSuccessfulStatusCodes() -> Single<Element> {
+        map { try $0.filterSuccessfulStatusCodes()}
+            .convertToAPICoreErrorIfCatch()
+    }
+    
+    
+    /// Filters out responses where `statusCode` falls within the range 200 - 399
+    func apiCoreFilterSuccessfulStatusAndRedirectCodes() -> Single<Element> {
+        map { try $0.filterSuccessfulStatusAndRedirectCodes()}
+            .convertToAPICoreErrorIfCatch()
+        
+    }
 }

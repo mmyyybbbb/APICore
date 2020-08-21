@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		034354C82201CA110039090C /* APICoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034354C72201CA110039090C /* APICoreError.swift */; };
+		034354C82201CA110039090C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034354C72201CA110039090C /* Errors.swift */; };
 		034354CA220204580039090C /* MockKeyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034354C9220204580039090C /* MockKeyType.swift */; };
 		03739EB621FEF14F00EC583E /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739EB521FEF14F00EC583E /* APIService.swift */; };
 		03739EB821FEF17C00EC583E /* APIServiceMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03739EB721FEF17C00EC583E /* APIServiceMethod.swift */; };
@@ -67,7 +67,7 @@
 
 /* Begin PBXFileReference section */
 		01D523B786806740180716C9 /* Pods_APICoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		034354C72201CA110039090C /* APICoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICoreError.swift; sourceTree = "<group>"; };
+		034354C72201CA110039090C /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		034354C9220204580039090C /* MockKeyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeyType.swift; sourceTree = "<group>"; };
 		0372DEBD220B36C0001FCEB4 /* MockSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSampleData.swift; sourceTree = "<group>"; };
 		03739EB521FEF14F00EC583E /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -255,7 +255,7 @@
 				03A74B0521E8C27B00D32CBF /* APICore.h */,
 				03A74B0621E8C27B00D32CBF /* Info.plist */,
 				03739EB921FF272200EC583E /* APICoreObjectContainer.swift */,
-				034354C72201CA110039090C /* APICoreError.swift */,
+				034354C72201CA110039090C /* Errors.swift */,
 				034354C9220204580039090C /* MockKeyType.swift */,
 				6D556D2B22E002AC0028FAE5 /* MethodRedirect.swift */,
 				03E3A9A9220314B10005A0A1 /* MethodParams.swift */,
@@ -525,7 +525,7 @@
 				03A5728222DF98BF00B182E6 /* Date+.swift in Sources */,
 				03E3A9B0220325450005A0A1 /* Aliases.swift in Sources */,
 				03CF07B3220C64190011F4EB /* Dictionary+.swift in Sources */,
-				034354C82201CA110039090C /* APICoreError.swift in Sources */,
+				034354C82201CA110039090C /* Errors.swift in Sources */,
 				03739EB621FEF14F00EC583E /* APIService.swift in Sources */,
 				03739EC222008E0900EC583E /* DefaultAPISeviceConfigurator.swift in Sources */,
 				2F6EBC1024A49D4900870F30 /* ThreadSafeArray.swift in Sources */,
