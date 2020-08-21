@@ -20,5 +20,5 @@ public typealias Plugin = PluginType
 public typealias AuthToken = String 
 
 public extension Session {
-    static var shared: Session = .default
+    static var shared: Session = .init(startRequestsImmediately: false)
 }

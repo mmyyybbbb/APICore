@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'APICore'
-  s.version          = '3.2.2'
+  s.version          = '3.2.3'
   s.summary          = 'Модуль APICore'
   s.homepage         = 'https://github.com/BCS-Broker/APICore'
   s.author           = 'BCS-Broker'
