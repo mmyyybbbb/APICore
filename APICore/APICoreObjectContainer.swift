@@ -59,6 +59,7 @@ public final class APICoreObjectContainer {
     //MARK: Unauthorized
     let requestUnauthorizedPublisher = PublishSubject<Moya.Response>()
     
+    /// Возвращает событие если ответ считается связанным с ошибкой доуступа APIServiceConfiguratorType.isUnauthorized если не удалось востановить доступ
     public lazy var requestUnauthorized: Observable<Moya.Response> = { requestUnauthorizedPublisher.share().asObservable() }()
     
     //MARK: Container for objects

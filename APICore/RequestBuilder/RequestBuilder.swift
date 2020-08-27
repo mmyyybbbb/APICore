@@ -50,7 +50,6 @@ open class RequestBuilder<S: APIServiceType>  {
             S.shared.provider.rx
                 .request(method, callbackQueue: DispatchQueue.global())
                 .catchError { throw ApiCoreRequestError(error: $0) }
-                .do(onError: notifyAboutError)
         }
         
         if let delegate = S.configurator?.delegate, let configurator = S.configurator {
@@ -67,9 +66,9 @@ open class RequestBuilder<S: APIServiceType>  {
                 return response
             }
             
-            return req().flatMap(tryRestoreAccess).map(notifyUnauthorized)
+            return req().flatMap(tryRestoreAccess).map(notifyUnauthorized).do(onError: notifyAboutError)
         } else {
-            return req()
+            return req().do(onError: notifyAboutError)
         }
     }
     

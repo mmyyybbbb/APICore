@@ -18,16 +18,29 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
     override func setUp() {
         let config = ReqresServicesConfigurator()
         config.authTokenProvider = self
+        config.delegate = self
         APICoreObjectContainer.instanceLazyInit.register(config)
         bag = DisposeBag()
         noInternetConnectionExpectation = XCTestExpectation()
         requestErrorExpectation = XCTestExpectation()
         requestSuccessExpectation = XCTestExpectation()
+        
+        ReqresServicesConfigurator.forceUnauthorized = false
+        checkRestoreToken.isInverted = false
+        checkUnauthorized.isInverted = false
+        noInternetConnectionExpectation.isInverted = false
+        requestErrorExpectation.isInverted = false
+        requestSuccessExpectation.isInverted = false
+        requestUnauthorizedExpectation.isInverted = false
     }
     
-    var noInternetConnectionExpectation = XCTestExpectation()
-    var requestErrorExpectation = XCTestExpectation()
-    var requestSuccessExpectation = XCTestExpectation()
+    var checkRestoreToken = XCTestExpectation(description: "checkRestoreToken")
+    var checkUnauthorized = XCTestExpectation(description: "checkUnauthorized")
+    var noInternetConnectionExpectation = XCTestExpectation(description: "noInternetConnectionExpectation")
+    var requestErrorExpectation = XCTestExpectation(description: "requestErrorExpectation")
+    var requestSuccessExpectation = XCTestExpectation(description: "requestSuccessExpectation")
+    var requestUnauthorizedExpectation = XCTestExpectation(description: "requestUnauthorizedExpectation")
+    
     var bag = DisposeBag()
     
     var token: AuthToken? = "token"
@@ -50,7 +63,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
             XCTAssert(error.asApiCoreError?.isHostNotFound ?? false)
         }
     }
-
+    
     
     func test_noInternetConnection() {
         let configurator = ReqresServicesConfigurator(baseUrl: "https://google.com")
@@ -89,6 +102,61 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         
     }
     
+    func test_unauthorized_failed_restore_access() {
+        
+        APICoreManager.shared.requestHttpErrors
+            .subscribe(onNext: { error in
+                self.requestErrorExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        
+        APICoreManager.shared.requestUnauthorized
+            .subscribe(onNext: { error in
+                self.requestUnauthorizedExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        checkRestoreToken.isInverted = true
+        do {
+            ReqresServicesConfigurator.forceUnauthorized = true
+            ReqresServicesConfigurator.skipRestoreAccessCount = 1
+            let request:Single<User> = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request().mapTo()
+            let _ = try request.toBlocking().first()
+        } catch let _ as ApiCoreDecodingError {
+            XCTAssert(true)
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
+        
+        wait(for: [requestUnauthorizedExpectation, checkRestoreToken, requestErrorExpectation], timeout: 5)
+    }
+    
+    func test_unauthorized_restore_access() {
+        
+        requestErrorExpectation.isInverted = true
+        APICoreManager.shared.requestHttpErrors
+            .subscribe(onNext: { error in
+                self.requestErrorExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        
+        requestUnauthorizedExpectation.isInverted = true
+        APICoreManager.shared.requestUnauthorized
+            .subscribe(onNext: { error in
+                self.requestUnauthorizedExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        
+        do {
+            ReqresServicesConfigurator.forceUnauthorized = true
+            let request:Single<Root<User>> = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request().mapTo()
+            let _ = try request.toBlocking().first()
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
+        
+        wait(for: [requestUnauthorizedExpectation, checkRestoreToken, requestErrorExpectation], timeout: 5)
+    }
+    
     func test_request_resource_not_found_error() {
         
         APICoreManager.shared.requestHttpErrors
@@ -99,7 +167,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
             .disposed(by: bag)
         
         do {
-            let request:Single<User> = RequestBuilder(ReqresUserAPI.self, .unexistedResource)
+            let request:Single<Root<User>> = RequestBuilder(ReqresUserAPI.self, .unexistedResource)
                 .request()
                 .apiCoreFilterSuccessfulStatusCodes()
                 .mapTo()
@@ -109,7 +177,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         } catch {
             XCTFail("Unexpected error type: \(error)")
         }
-
+        
         wait(for: [requestErrorExpectation], timeout: 10)
     }
     
@@ -203,6 +271,18 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
             XCTAssertNotNil(error.asApiCoreDecodingError)
         }
     }
- 
+    
 }
-
+extension APICoreTests: APIServiceConfiguratorDelegate {
+    
+    func tryRestoreAccess(response: Response) -> Single<Void> {
+        guard  ReqresServicesConfigurator.skipRestoreAccessCount == 0 else {
+            ReqresServicesConfigurator.skipRestoreAccessCount -= 1
+            return .just(())
+        }
+        
+        ReqresServicesConfigurator.forceUnauthorized = false
+        checkRestoreToken.fulfill()
+        return .just(())
+    }
+}

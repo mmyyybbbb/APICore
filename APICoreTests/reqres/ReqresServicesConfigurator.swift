@@ -10,14 +10,20 @@ import APICore
 import Moya
 
 final class ReqresServicesConfigurator: APIServiceConfiguratorType {
+    
+    static var forceUnauthorized: Bool = false {
+        didSet { skipRestoreAccessCount = 0 }
+    }
+    static var skipRestoreAccessCount: Int = 0
+    
     var requestsErrorBehavior: RequestErrorBehavior? = nil
     
     var delegate: APIServiceConfiguratorDelegate? = nil
     
-    var isNeedTryRestoreAccess: Bool = false
+    var isNeedTryRestoreAccess: Bool = true
     
     func isUnauthorized(response: Response) -> Bool {
-        return false
+        return ReqresServicesConfigurator.forceUnauthorized
     }
     
     var baseHeaders: [String : String]? = nil
