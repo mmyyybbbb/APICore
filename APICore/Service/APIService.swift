@@ -105,8 +105,7 @@ fileprivate extension APIService {
     }
     
     func buildTask(_ method: Method) -> Task {
-        var methodParams = method.params
-        print("url: \(authStrategy)")
+        var methodParams = method.params 
         
         if case let AuthStrategy.addTokenToUrl(urlParamName: authUrlTokenKey) = authStrategy,
            let token = configuratorStrong.delegate?.token {
@@ -156,8 +155,7 @@ fileprivate extension APIService {
             fullHeaders = fullHeaders.merging(methodHeaders,
                                               uniquingKeysWith: {( _, meth) in meth })
         }
-        
-        print("header: \(authStrategy)")
+         
         if case let AuthStrategy.addTokenToHeader(headerName: headerTokenKey) = authStrategy,
             let token = configuratorStrong.delegate?.token {
             fullHeaders[headerTokenKey] = token 
