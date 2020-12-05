@@ -1,4 +1,4 @@
-platform :ios, '10.0'
+platform :ios, '12.0'
 use_frameworks!
 inhibit_all_warnings!
 
@@ -27,7 +27,7 @@ post_install do |installer|
     
     if ['Alamofire', 'Moya', 'Result', 'RxBlocking', 'RxSwift'].include? target.name
       target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '5.1'
+        config.build_settings['SWIFT_VERSION'] = '5.2'
       end
     end
     
