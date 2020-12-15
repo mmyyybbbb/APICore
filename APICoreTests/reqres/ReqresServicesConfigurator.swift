@@ -25,7 +25,7 @@ final class ReqresServicesConfigurator: APIServiceConfiguratorType {
     func isUnauthorized(response: Response) -> Bool {
         return ReqresServicesConfigurator.forceUnauthorized
     }
-    
+     
     var baseHeaders: [String : String]? = nil
     var session: Session = .shared
     var bodyEncoding: MethodBodyEncoding = { _ in JSONEncoding.default}

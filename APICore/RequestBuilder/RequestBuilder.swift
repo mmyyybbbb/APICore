@@ -22,7 +22,7 @@ open class RequestBuilder<S: APIServiceType>  {
     
     public func request() -> Single<Response> {
         
-        if let behavior = S.configurator?.requestsErrorBehavior {
+        if let behavior = S.configurator.requestsErrorBehavior {
             return request(forceErrorBehavior: behavior)
         }
         
@@ -47,12 +47,29 @@ open class RequestBuilder<S: APIServiceType>  {
         let notifyAboutError: (Error) -> Void = { APICoreManager.shared.requestHttpErrorsPublisher.onNext($0) }
         
         func req() -> Single<Response> {
-            S.shared.provider.rx
+            
+            let baseReq = S.shared.provider.rx
                 .request(method, callbackQueue: DispatchQueue.global())
                 .catchError { throw ApiCoreRequestError(error: $0) }
+            
+            if case AuthStrategy.withoutAuth = S.shared.authStrategy   {
+                return baseReq
+            } else {
+                return Single.just(()).flatMap { () -> Single<Response> in
+                    let configurator = S.configurator
+                    guard let delegate = configurator.delegate else { return baseReq }
+                    if delegate.isTokenValid {
+                        return baseReq
+                    } else {
+                        return delegate.refreshToken().flatMap { baseReq }
+                    }
+                }
+            }
         }
         
-        if let delegate = S.configurator?.delegate, let configurator = S.configurator {
+        let configurator = S.configurator
+        
+        if let delegate = configurator.delegate {
             
             func tryRestoreAccess(response: Response) -> Single<Response> {
                 guard configurator.isNeedTryRestoreAccess, configurator.isUnauthorized(response: response) else { return .just(response) }

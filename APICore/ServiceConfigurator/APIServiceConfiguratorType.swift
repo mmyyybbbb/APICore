@@ -17,7 +17,6 @@ public protocol APIServiceConfiguratorType: class {
     var bodyEncoding: MethodBodyEncoding { get }
     var requestsErrorBehavior: RequestErrorBehavior? { get }
     var delegate: APIServiceConfiguratorDelegate? { get set }
-    
     var isNeedTryRestoreAccess: Bool { get }
     func isUnauthorized(response: Response) -> Bool
 }
@@ -25,9 +24,17 @@ public protocol APIServiceConfiguratorType: class {
 public protocol APIServiceConfiguratorDelegate: class {
     var token: AuthToken? { get set }
 
-    func tryRestoreAccess(response: Response) -> Single<Void>
+    func tryRestoreAccess(response: Response?) -> Single<Void>
+    
+    var isTokenValid: Bool { get }
 }
 
 public extension APIServiceConfiguratorDelegate {
-    func tryRestoreAccess(response: Response) -> Single<Void> { return .just(()) }
+    func tryRestoreAccess(response: Response?) -> Single<Void> { return .just(()) }
+    var isTokenValid: Bool { true }
+    
+    func refreshToken() -> Single<Void> {
+        tryRestoreAccess(response: nil)
+    }
 }
+ 

@@ -15,6 +15,8 @@ import Moya
 
 class APICoreTests: XCTestCase, AuthTokenProvider {
     
+    var isTokenValid: Bool = true
+    
     override func setUp() {
         let config = ReqresServicesConfigurator()
         config.authTokenProvider = self
@@ -157,6 +159,35 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         wait(for: [requestUnauthorizedExpectation, checkRestoreToken, requestErrorExpectation], timeout: 5)
     }
     
+    func test_refresh_token() {
+        
+        requestErrorExpectation.isInverted = true
+        APICoreManager.shared.requestHttpErrors
+            .subscribe(onNext: { error in
+                self.requestErrorExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        
+        requestUnauthorizedExpectation.isInverted = true
+        APICoreManager.shared.requestUnauthorized
+            .subscribe(onNext: { error in
+                self.requestUnauthorizedExpectation.fulfill()
+            })
+            .disposed(by: bag)
+        
+        isTokenValid = false
+        do {
+            let request:Single<Root<User>> = RequestBuilder(ReqresUserAPI.self, .single(id: 2)).request().mapTo()
+            let _ = try request.toBlocking().first()
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
+        
+        wait(for: [requestUnauthorizedExpectation, checkRestoreToken, requestErrorExpectation], timeout: 5)
+        XCTAssert(isTokenValid)
+    }
+    
+    
     func test_request_resource_not_found_error() {
         
         APICoreManager.shared.requestHttpErrors
@@ -275,13 +306,14 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
 }
 extension APICoreTests: APIServiceConfiguratorDelegate {
     
-    func tryRestoreAccess(response: Response) -> Single<Void> {
+    func tryRestoreAccess(response: Response?) -> Single<Void> {
         guard  ReqresServicesConfigurator.skipRestoreAccessCount == 0 else {
             ReqresServicesConfigurator.skipRestoreAccessCount -= 1
             return .just(())
         }
         
         ReqresServicesConfigurator.forceUnauthorized = false
+        isTokenValid = true
         checkRestoreToken.fulfill()
         return .just(())
     }

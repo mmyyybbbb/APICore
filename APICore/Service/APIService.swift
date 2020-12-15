@@ -18,12 +18,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
     open var serviceHeaders:[String: String]? { return nil }
     open var authStrategy: AuthStrategy { return .withoutAuth }
     
-    private var configuratorStrong: Configurator {
-        guard let serviceConfigurator = APIService<TMethod, TConfigurator>.configurator else {
-            fatal("ServiceConfigurator is nil")
-        }
-        return serviceConfigurator
-    }
+    private var configuratorStrong: Configurator { APIService<TMethod, TConfigurator>.configurator }
     
     lazy public var provider: MoyaProvider<TMethod> = {
         let configurator = configuratorStrong
@@ -50,10 +45,7 @@ open class APIService<TMethod, TConfigurator>: APIServiceType where TMethod: API
 //MARK: Public+
 public extension  APIService {
     var authTokenProvided: Bool {
-        guard let serviceConfigurator = APIService<TMethod, TConfigurator>.configurator else {
-            return false
-        }
-        return serviceConfigurator.delegate?.token != nil
+        return APIService<TMethod, TConfigurator>.configurator.delegate?.token != nil
     }
     
     func setMock(for key: Method.MockKey, value: String) {
