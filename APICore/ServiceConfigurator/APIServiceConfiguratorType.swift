@@ -32,6 +32,8 @@ public protocol APIServiceConfiguratorDelegate: class {
 public extension APIServiceConfiguratorDelegate {
     var isTokenValid: Bool { true }
     
+    func tryRestoreAccess(response: Response?) -> Single<Void> { .never() }
+    
     func refreshToken() -> Single<Void> {
         tryRestoreAccess(response: nil)
     }
