@@ -52,7 +52,9 @@ open class RequestBuilder<S: APIServiceType>  {
                 .request(method, callbackQueue: DispatchQueue.global())
                 .catchError { throw ApiCoreRequestError(error: $0) }
             
-            if case AuthStrategy.withoutAuth = S.shared.authStrategy   {
+            if case AuthStrategy.withoutAuth = S.shared.authStrategy {
+                return baseReq
+            } else if let authorizable = method as? AccessTokenAuthorizable, authorizable.authorizationType == .none {
                 return baseReq
             } else {
                 return Single.just(()).flatMap { () -> Single<Response> in
@@ -64,8 +66,9 @@ open class RequestBuilder<S: APIServiceType>  {
                         return delegate.refreshToken().flatMap { baseReq }
                     }
                 }
-            }
+            } 
         }
+        
         
         let configurator = S.configurator
         
