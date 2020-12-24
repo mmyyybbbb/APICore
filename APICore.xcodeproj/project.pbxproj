@@ -52,6 +52,7 @@
 		6D556D2C22E002AC0028FAE5 /* MethodRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D556D2B22E002AC0028FAE5 /* MethodRedirect.swift */; };
 		6DFE548022E2AB2200AB684E /* JSONDecoder+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFE547F22E2AB2200AB684E /* JSONDecoder+.swift */; };
 		6DFE549722E2B1EA00AB684E /* PluginType+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFE549622E2B1EA00AB684E /* PluginType+.swift */; };
+		CB2154962594E6C500464B36 /* Import+exported.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2154952594E6C500464B36 /* Import+exported.swift */; };
 		F06659A4D60C4C24CF651030 /* Pods_APICoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D523B786806740180716C9 /* Pods_APICoreTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -107,7 +108,7 @@
 		03E3A9B5220330680005A0A1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		03E3A9B72203318B0005A0A1 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		03E3A9BB220333680005A0A1 /* Pluggins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pluggins.swift; sourceTree = "<group>"; };
-		03E3AA67220879A90005A0A1 /* APICore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = APICore.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		03E3AA67220879A90005A0A1 /* APICore.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = APICore.podspec; sourceTree = "<group>"; };
 		03E630F3220AEA470082685F /* AuthStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStrategy.swift; sourceTree = "<group>"; };
 		03E630F6220AEAE00082685F /* AuthTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenProvider.swift; sourceTree = "<group>"; };
 		07584CA929F6A94467FB6216 /* Pods_APICore_APICoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APICore_APICoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +121,8 @@
 		883F8C7D167220DE3EE50BE6 /* Pods-APICore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICore.release.xcconfig"; path = "Target Support Files/Pods-APICore/Pods-APICore.release.xcconfig"; sourceTree = "<group>"; };
 		AA7D941E875C15CAB0318F61 /* Pods-APICoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICoreTests.release.xcconfig"; path = "Target Support Files/Pods-APICoreTests/Pods-APICoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		B44A2CF780F84566CB8B5918 /* Pods-APICoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICoreTests.debug.xcconfig"; path = "Target Support Files/Pods-APICoreTests/Pods-APICoreTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB2154642594E2B000464B36 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		CB2154952594E6C500464B36 /* Import+exported.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Import+exported.swift"; sourceTree = "<group>"; };
 		D3A8C67476F300356715CE08 /* Pods-APICore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APICore.debug.xcconfig"; path = "Target Support Files/Pods-APICore/Pods-APICore.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,6 +227,7 @@
 		03A74AF821E8C27B00D32CBF = {
 			isa = PBXGroup;
 			children = (
+				CB2154642594E2B000464B36 /* Package.swift */,
 				03E3AA67220879A90005A0A1 /* APICore.podspec */,
 				03A74B0421E8C27B00D32CBF /* APICore */,
 				03739ECC22009B1100EC583E /* APICoreTests */,
@@ -263,6 +267,7 @@
 				03E3A9AD220318C90005A0A1 /* BinaryData.swift */,
 				03E3A9BB220333680005A0A1 /* Pluggins.swift */,
 				03E3A9AF220325450005A0A1 /* Aliases.swift */,
+				CB2154952594E6C500464B36 /* Import+exported.swift */,
 			);
 			path = APICore;
 			sourceTree = "<group>";
@@ -533,6 +538,7 @@
 				6DFE549722E2B1EA00AB684E /* PluginType+.swift in Sources */,
 				03739EBE21FF41DF00EC583E /* APIServiceConfiguratorType.swift in Sources */,
 				03E630F7220AEAE00082685F /* AuthTokenProvider.swift in Sources */,
+				CB2154962594E6C500464B36 /* Import+exported.swift in Sources */,
 				03A5727C22DF97FC00B182E6 /* SomeCodingKey.swift in Sources */,
 				03A5727A22DF97FC00B182E6 /* UnkeyedDecodingContainer+.swift in Sources */,
 				037AB60E238E64AC0041EB43 /* Single+Response.swift in Sources */,
@@ -753,7 +759,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.7;
+				MARKETING_VERSION = 3.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.bcs.APICore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -783,7 +789,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.7;
+				MARKETING_VERSION = 3.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.bcs.APICore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
