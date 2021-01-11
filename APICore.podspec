@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.module_name  = 'APICore'  
   s.source_files  = 'APICore/**/*.swift'
   s.dependency 'Moya', '~> 14.0.0'
-  s.dependency 'RxSwift', '~> 5.1.0'
+  s.dependency 'RxSwift', '~> 6.0'
 end
