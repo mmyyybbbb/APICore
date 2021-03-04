@@ -35,7 +35,7 @@ open class RequestBuilder<S: APIServiceType>  {
             return try onCatchError(behavior: behavior, error: error)
         }
         
-        return _request().catchError(catchError)
+        return _request().catch(catchError)
     }
     
     public func requestWithoutErrorBehavior() -> Single<Response> {
@@ -50,7 +50,7 @@ open class RequestBuilder<S: APIServiceType>  {
             
             let baseReq = S.shared.provider.rx
                 .request(method, callbackQueue: DispatchQueue.global())
-                .catchError { throw ApiCoreRequestError(error: $0) }
+                .catch { throw ApiCoreRequestError(error: $0) }
             
             if case AuthStrategy.withoutAuth = S.shared.authStrategy {
                 return baseReq
@@ -142,7 +142,7 @@ public extension Single where Element == Response {
         asObservable()
             .map { try $0.decode(type, using: decoder)  }
             .asSingle()
-            .observeOn(scheduler)
+            .observe(on: scheduler)
     }
     
     
@@ -151,14 +151,14 @@ public extension Single where Element == Response {
         asObservable()
             .map { try $0.decode(T.self, using: decoder)  }
             .asSingle()
-            .observeOn(scheduler)
+            .observe(on: scheduler)
     }
     
     func mapToVoid(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<Void> {
         asObservable()
             .map { response in return Void() }
             .asSingle()
-            .observeOn(scheduler)
+            .observe(on: scheduler)
     }
     
     func mapWithRedirectTo<T:Decodable>(_ type: T.Type,
@@ -178,7 +178,7 @@ public extension Single where Element == Response {
                 }
         }
         .asSingle()
-        .observeOn(scheduler)
+            .observe(on: scheduler)
     }
     
     func mapWithRedirectIfHasTo<T:Decodable>(_ type: T.Type,
@@ -197,7 +197,7 @@ public extension Single where Element == Response {
                     throw errorForThrow
                 }
         }
-        .asSingle().observeOn(scheduler)
+            .asSingle().observe(on: scheduler)
     }
     
     func mapToRedirect(on scheduler: ImmediateSchedulerType = MainScheduler.instance) -> Single<MethodRedirect> {
@@ -205,7 +205,7 @@ public extension Single where Element == Response {
             .asObservable()
             .map { try MethodRedirect($0.response) }
             .asSingle()
-            .observeOn(scheduler)
+            .observe(on: scheduler)
     }
 }
 
@@ -214,7 +214,7 @@ public extension Single where Element == Response {
 public extension PrimitiveSequence where Trait == SingleTrait, Element == APICoreResponse {
     
     func convertToAPICoreErrorIfCatch() -> PrimitiveSequence<SingleTrait, APICoreResponse> {
-        self.catchError { err in
+        self.catch { err in
             let apiCoreErr = ApiCoreRequestError(error: err)
             publish(apiCoreErr)
             throw apiCoreErr

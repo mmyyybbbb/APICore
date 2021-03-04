@@ -6,7 +6,7 @@ source 'https://gitlab.com/BCSBroker/iOS/brokerrepo.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
 def pods
-  pod 'RxSwift', '~> 5.1.0'
+  pod 'RxSwift', '~> 6.0.0'
   pod 'Moya', '~> 14.0.0'
 end
 

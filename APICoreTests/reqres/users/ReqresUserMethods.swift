@@ -7,8 +7,10 @@
 //
 
 import APICore
-
+ 
 enum ReqresUserMethods: APIServiceMethod {
+    var owner: MethodOwner { TestOwner() }
+    
 
     var methodPath: MethodPath {
         switch self {

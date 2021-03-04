@@ -23,13 +23,21 @@ public final class Tracer: PluginType {
 
     public struct Key {
         public static let traceId = "x-traceId"
+        public static let owner = "x-owner"
+        public static let scope = "x-scope"
     }
     
     public static var additionalTraceHeaders: [String: String] = [:]
     
+    public static var sendMethodOwner: Bool = false
+    
     public func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
         var request = request
         request.addValue(UUID.init().uuidString, forHTTPHeaderField: Tracer.Key.traceId)
+        if Tracer.sendMethodOwner, let metaInfo = target as? MethodMeta {
+            request.addValue(metaInfo.owner.owner, forHTTPHeaderField: Tracer.Key.owner)
+            request.addValue(metaInfo.owner.scopeName, forHTTPHeaderField: Tracer.Key.scope)
+        }
         for traceParam in Tracer.additionalTraceHeaders {
             request.addValue(traceParam.value, forHTTPHeaderField: traceParam.key)
         }
@@ -44,6 +52,8 @@ public protocol Traceble {
 extension URLRequest: Traceble {
     /// уникальный id запроса добавляется как header к запросу плагином Tracer
     public var traceId: String { allHTTPHeaderFields?[Tracer.Key.traceId] ?? "" }
+    public var scopeName: String { allHTTPHeaderFields?[Tracer.Key.scope] ?? "" }
+    public var owner: String { allHTTPHeaderFields?[Tracer.Key.owner] ?? "" }
 }
 
  

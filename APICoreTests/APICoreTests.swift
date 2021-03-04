@@ -34,6 +34,7 @@ class APICoreTests: XCTestCase, AuthTokenProvider {
         requestErrorExpectation.isInverted = false
         requestSuccessExpectation.isInverted = false
         requestUnauthorizedExpectation.isInverted = false
+        Tracer.sendMethodOwner = true
     }
     
     var checkRestoreToken = XCTestExpectation(description: "checkRestoreToken")

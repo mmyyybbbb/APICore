@@ -9,6 +9,12 @@
 import APICore
 import Moya
 
+struct TestOwner: MethodOwner {
+    let scopeName: String = "Test"
+    // Владелец
+    let owner: String = "Test"
+}
+
 final class ReqresServicesConfigurator: APIServiceConfiguratorType {
     
     static var forceUnauthorized: Bool = false {
