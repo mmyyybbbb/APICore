@@ -52,8 +52,8 @@ public protocol Traceble {
 extension URLRequest: Traceble {
     /// уникальный id запроса добавляется как header к запросу плагином Tracer
     public var traceId: String { allHTTPHeaderFields?[Tracer.Key.traceId] ?? "" }
-    public var scopeName: String { allHTTPHeaderFields?[Tracer.Key.scope] ?? "" }
-    public var owner: String { allHTTPHeaderFields?[Tracer.Key.owner] ?? "" }
+    public var scopeName: String? { allHTTPHeaderFields?[Tracer.Key.scope] }
+    public var owner: String? { allHTTPHeaderFields?[Tracer.Key.owner] }
 }
 
  

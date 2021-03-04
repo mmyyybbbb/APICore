@@ -24,6 +24,8 @@ public struct ApiCoreRequestError: Error, Traceble {
         if let moyaError = error as? MoyaError {
             self.moyaError = moyaError
             self.traceId = moyaError.response?.request?.traceId ?? ""
+            self.owner = moyaError.response?.request?.owner
+            self.scope = moyaError.response?.request?.owner
             self.url = moyaError.response?.response?.url
             let nsError =   moyaError.asNSError
             self.originNSError =  nsError.asAFError?.underlyingError?.asNSError ?? nsError
@@ -33,6 +35,8 @@ public struct ApiCoreRequestError: Error, Traceble {
         } else {
             self.moyaError = nil
             self.traceId = ""
+            self.owner = nil
+            self.scope = nil
             self.url = nil
             self.originNSError = error.asNSError
             self.response = nil
@@ -49,6 +53,10 @@ public struct ApiCoreRequestError: Error, Traceble {
     public let originErorr: Error
     /// уникальный id запроса добавляется как header к запросу плагином Tracer
     public let traceId: String
+    /// Владелец метода  запроса добавляется как header к запросу плагином Tracer
+    public let owner: String?
+    /// Скоуп  метода  запроса добавляется как header к запросу плагином Tracer
+    public let scope: String?
     /// URL на который был выполнен запрос
     public let url: URL?
     /// Модель респонса из Moya
@@ -90,13 +98,15 @@ public extension ApiCoreRequestError {
 /// Ошибка парсинга данных
 public struct ApiCoreDecodingError: Error, Traceble  {
     
-    public init(decodingError: DecodingError, targetType: Any, traceId: String, data: String, response: Response? = nil) {
+    public init(decodingError: DecodingError, targetType: Any, traceId: String, owner:String? = nil, scope: String? = nil,  data: String, response: Response? = nil) {
         self.decodingError = decodingError
         self.targetType = targetType
         self.traceId = traceId
         self.data = data
         self.response = response
         self.statusCode = response?.statusCode
+        self.owner = owner
+        self.scope = scope
     }
     
     init?(moyaError: MoyaError, targetType: Any) {
@@ -106,6 +116,8 @@ public struct ApiCoreDecodingError: Error, Traceble  {
         guard let resp = moyaError.response else { return nil  }
         self.data = String(data: resp.data, encoding: .utf8) ?? "cant decode with utf8"
         self.traceId =  resp.request?.traceId ?? ""
+        self.scope = resp.request?.scopeName
+        self.owner = resp.request?.owner
         self.response = moyaError.response
         self.statusCode = moyaError.response?.statusCode
     }
@@ -117,6 +129,8 @@ public struct ApiCoreDecodingError: Error, Traceble  {
             self.init(decodingError: decodingError,
                       targetType: targetType,
                       traceId: response.request?.traceId ?? "",
+                      owner: response.request?.owner,
+                      scope: response.request?.scopeName,
                       data: String(data: response.data, encoding: .utf8) ?? "cant decode with utf8",
                       response: response)
         } else {
@@ -127,6 +141,8 @@ public struct ApiCoreDecodingError: Error, Traceble  {
     public let decodingError: DecodingError
     public let targetType: Any
     public let traceId: String
+    public let owner: String?
+    public let scope: String?
     public var targetTypeName: String { String(describing: targetType) }
     public let data: String
     public let statusCode: Int?
