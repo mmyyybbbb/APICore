@@ -10,8 +10,7 @@ import Alamofire
 import UIKit
 
 public protocol APIServiceMethod: TargetType & MethodMeta {
-    associatedtype MockKey: MockKeyType
-    var owner: MethodOwner { get }
+    associatedtype MockKey: MockKeyType 
     var methodPath: MethodPath { get }
     var params: MethodParams { get }
     var mockKey: MockKey? { get }
